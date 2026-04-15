@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    /* Language */
+    "target": "ES2021",
+    "lib": ["DOM", "DOM.Iterable", "ES2021"],
+
+    /* Module */
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "ignoreDeprecations": "6.0",
+    "resolveJsonModule": true,
+
+    /* React */
+    "jsx": "react-jsx",
+
+    /* Strictness */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+
+    /* Code Quality */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Imports */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* Paths */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    /* Output */
+    "noEmit": true,
+
+    /* Performance */
+    "skipLibCheck": true,
+
+    /* Compatibility */
+    "forceConsistentCasingInFileNames": true,
+
+    /* Modern features */
+    "useDefineForClassFields": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
