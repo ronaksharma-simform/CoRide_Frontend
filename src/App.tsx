@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   return (
     <>
-      <h1>CoRide</h1>
+      <h1 className="text-3xl text-black-50">CoRide</h1>
     </>
   );
 }
