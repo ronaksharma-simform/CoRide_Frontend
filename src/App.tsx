@@ -3,6 +3,7 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoutes from "./utils/protectedRoutes";
 import LoginPage from "./pages/Login";
+import { Toaster } from "sonner";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         {/* fallback route */}
         <Route path="*" element={<h1>404 Page Not Found</h1>} />
       </Routes>
+      <Toaster />
     </>
   );
 }

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const backendURL = "http://127.0.0.1:5000";
+const backendURL = "http://127.0.0.1:3000";
 
 export interface LoginResponse {
   success: boolean;
@@ -17,19 +17,25 @@ export interface LoginResponse {
 export const registerUser = createAsyncThunk<
   LoginResponse,
   { email: string; password: string },
-  { rejectValue: string }
+  {
+    rejectValue: {
+      sucess: boolean;
+      message: string;
+    };
+  }
 >("auth/login", async ({ email, password }, { rejectWithValue }) => {
   try {
     const config = { headers: { "Content-Type": "application/json" } };
     const response = await axios.post(
-      `${backendURL}/auth/register`,
+      `${backendURL}/auth/login`,
       { email, password },
       config,
     );
     return response.data;
   } catch (error) {
-    if (error instanceof Error) return rejectWithValue(error.message);
-    rejectWithValue("Error occured while login");
+    if (error instanceof Error)
+      return rejectWithValue({ sucess: false, message: error.message });
+    rejectWithValue({ sucess: false, message: "Error occured while login" });
   }
 });
 const initialState: AuthState = {
@@ -63,7 +69,10 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Login Failed";
+        state.isAuthenticated = false;
+        state.accessToken = null;
+        state.user = null;
+        state.error = action.payload?.message || "Login Failed";
       });
   },
 });
