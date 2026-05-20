@@ -4,13 +4,16 @@ import { Route, Routes } from "react-router-dom";
 import ProtectedRoutes from "./utils/protectedRoutes";
 import LoginPage from "./pages/Login";
 import { Toaster } from "sonner";
+import SignUp from "./pages/SignUp";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="login" element={<LoginPage />} />
-        <Route path="signup" element={<h2>SignUp</h2>} />
+        <Route path="signup" element={<SignUp />} />
+        <Route path="verify-email" element={<VerifyEmail />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="home" element={<h2>Home</h2>} />
         </Route>

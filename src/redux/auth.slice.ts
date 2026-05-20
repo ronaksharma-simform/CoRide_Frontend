@@ -1,7 +1,8 @@
 import { AuthState, IUser } from "@/features/auth/auth.interface";
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { registerUser } from "./auth.thunk";
 
 const backendURL = "http://127.0.0.1:3000";
 
@@ -14,15 +15,10 @@ export interface LoginResponse {
 
   accessToken: string;
 }
-export const registerUser = createAsyncThunk<
+export const loginUser = createAsyncThunk<
   LoginResponse,
   { email: string; password: string },
-  {
-    rejectValue: {
-      sucess: boolean;
-      message: string;
-    };
-  }
+  { rejectValue: { sucess: boolean; message: string } }
 >("auth/login", async ({ email, password }, { rejectWithValue }) => {
   try {
     const config = { headers: { "Content-Type": "application/json" } };
@@ -33,9 +29,16 @@ export const registerUser = createAsyncThunk<
     );
     return response.data;
   } catch (error) {
-    if (error instanceof Error)
-      return rejectWithValue({ sucess: false, message: error.message });
-    rejectWithValue({ sucess: false, message: "Error occured while login" });
+    console.log(error);
+    if (error instanceof AxiosError) {
+      const errorMsg =
+        error.response?.data.message ?? "Error occured while login ";
+      return rejectWithValue({ sucess: false, message: errorMsg });
+    }
+    rejectWithValue({
+      sucess: false,
+      message: "Error occured while login",
+    });
   }
 });
 const initialState: AuthState = {
@@ -56,15 +59,31 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state) => {
+      .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
         state.accessToken = action.payload.accessToken;
         state.user = action.payload.data;
+        state.error = null;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.accessToken = null;
+        state.user = null;
+        state.error = action.payload?.message || "Login Failed";
+      })
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state) => {
+        state.loading = false;
+        state.isAuthenticated = false;
         state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -72,7 +91,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.accessToken = null;
         state.user = null;
-        state.error = action.payload?.message || "Login Failed";
+        state.error = action.payload?.message || "Registration Failed";
       });
   },
 });
