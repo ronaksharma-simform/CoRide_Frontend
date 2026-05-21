@@ -1,14 +1,18 @@
-import { Toast } from "radix-ui";
+import isAuthenticated from "@/utils/isAuthenicated";
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
+import { Toaster } from "sonner";
 
-export default function MainLayout() {
+export default function AuthLayout() {
+  if (isAuthenticated()) {
+    return <Navigate to={"/"} replace />;
+  }
   return (
     <div>
       <main>
         <Outlet />
+        <Toaster />
       </main>
-      <Toast />
     </div>
   );
 }

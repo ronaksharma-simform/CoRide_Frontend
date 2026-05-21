@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MailCheck } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import React from "react";
-import { resendVerificationEmail } from "@/redux/auth.thunk";
+import { resendVerificationEmail } from "@/features/auth/store/auth.thunk";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { toast } from "sonner";
 

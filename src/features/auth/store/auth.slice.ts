@@ -1,4 +1,4 @@
-import { AuthState, IUser } from "@/features/auth/auth.interface";
+import { AuthState, IUser } from "@/features/auth/types/auth.interface";
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";

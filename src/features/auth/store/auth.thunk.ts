@@ -3,7 +3,7 @@ import {
   IResendVerificationEmailSchema,
   ISignupResponse,
   IUserRegistrationSchema,
-} from "@/features/auth/auth.interface";
+} from "@/features/auth/types/auth.interface";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 

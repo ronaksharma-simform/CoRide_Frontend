@@ -9,11 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch } from "@/hooks/hooks";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { loginUser } from "@/redux/auth.slice";
+import { loginUser } from "@/features/auth/store/auth.slice";
 import {
   IUserLoginSchema,
   UserLoginSchema,
-} from "@/features/auth/auth.interface";
+} from "@/features/auth/types/auth.interface";
 const Login = () => {
   const {
     control,

@@ -10,7 +10,7 @@ import { useForm, Controller } from "react-hook-form";
 import {
   IUserRegistrationSchema,
   UserRegistrationSchema,
-} from "@/features/auth/auth.interface";
+} from "@/features/auth/types/auth.interface";
 
 import { useAppDispatch } from "@/hooks/hooks";
 
@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 import { toast } from "sonner";
 
-import { registerUser } from "@/redux/auth.thunk";
+import { registerUser } from "@/features/auth/store/auth.thunk";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
