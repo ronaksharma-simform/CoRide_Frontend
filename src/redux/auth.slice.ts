@@ -2,7 +2,7 @@ import { AuthState, IUser } from "@/features/auth/auth.interface";
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
-import { registerUser } from "./auth.thunk";
+import { registerUser, resendVerificationEmail } from "./auth.thunk";
 
 const backendURL = "http://127.0.0.1:3000";
 
@@ -81,10 +81,12 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = false;
         state.error = null;
+        console.log(action.payload);
+        state.user = action.payload.data;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -92,6 +94,23 @@ const authSlice = createSlice({
         state.accessToken = null;
         state.user = null;
         state.error = action.payload?.message || "Registration Failed";
+      })
+      .addCase(resendVerificationEmail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(resendVerificationEmail.fulfilled, (state) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.error = null;
+      })
+      .addCase(resendVerificationEmail.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.accessToken = null;
+        state.user = null;
+        state.error =
+          action.payload?.message || "Resend Verification Email Failed";
       });
   },
 });

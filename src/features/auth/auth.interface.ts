@@ -1,9 +1,5 @@
 import { z } from "zod";
 
-/* =========================================
-   COMMON PASSWORD SCHEMA
-========================================= */
-
 const PasswordSchema = z
   .string()
   .trim()
@@ -50,11 +46,6 @@ const PasswordSchema = z
       });
     }
   });
-
-/* =========================================
-   BASE USER SCHEMA
-========================================= */
-
 export const UserSchema = z.object({
   username: z
     .string()
@@ -100,10 +91,6 @@ export const UserSchema = z.object({
   created_at: z.string().datetime().optional(),
 });
 
-/* =========================================
-   USER REGISTRATION SCHEMA
-========================================= */
-
 export const UserRegistrationSchema = UserSchema.pick({
   username: true,
   firstName: true,
@@ -122,23 +109,14 @@ export const UserRegistrationSchema = UserSchema.pick({
     .max(100, "Organization name too long"),
 });
 
-/* =========================================
-   USER LOGIN SCHEMA
-========================================= */
-
 export const UserLoginSchema = z.object({
   email: z
     .string()
     .trim()
     .email("Invalid email")
     .transform((val) => val.toLowerCase()),
-
   password: PasswordSchema,
 });
-
-/* =========================================
-   USER RESPONSE SCHEMA
-========================================= */
 
 export const UserResponseSchema = UserSchema.pick({
   username: true,
@@ -154,54 +132,40 @@ export const UserResponseSchema = UserSchema.pick({
   created_at: true,
 });
 
-/* =========================================
-   LOGIN RESPONSE SCHEMA
-========================================= */
-
 export const LoginResponseSchema = z.object({
   success: z.boolean(),
-
   message: z.string(),
-
   data: UserResponseSchema,
-
   accessToken: z.string(),
 });
 
-/* =========================================
-   SIGNUP RESPONSE SCHEMA
-========================================= */
-
 export const SignupResponseSchema = z.object({
   success: z.literal(true),
-
   message: z.string(),
-
   data: UserResponseSchema,
 });
 
-/* =========================================
-   AUTH STATE SCHEMA
-========================================= */
-
 export const AuthStateSchema = z.object({
   user: UserResponseSchema.nullable(),
-
   accessToken: z.string().nullable(),
-
   isAuthenticated: z.boolean(),
-
   loading: z.boolean(),
-
   error: z.string().nullable(),
 });
-
-/* =========================================
-   TYPES
-========================================= */
-
+export const ResendVerificationEmailResponse = z.object({
+  success: z.literal(true),
+  message: z.string(),
+});
+export const ResendVerificationEmailSchema = z.object({
+  email: z.email(),
+});
 export type IUser = z.infer<typeof UserResponseSchema>;
-
+export type IResendVerificationEmailResponse = z.infer<
+  typeof ResendVerificationEmailResponse
+>;
+export type IResendVerificationEmailSchema = z.infer<
+  typeof ResendVerificationEmailSchema
+>;
 export type AuthState = z.infer<typeof AuthStateSchema>;
 
 export type LoginResponse = z.infer<typeof LoginResponseSchema>;

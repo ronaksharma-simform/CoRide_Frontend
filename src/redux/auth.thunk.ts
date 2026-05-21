@@ -1,4 +1,6 @@
 import {
+  IResendVerificationEmailResponse,
+  IResendVerificationEmailSchema,
   ISignupResponse,
   IUserRegistrationSchema,
 } from "@/features/auth/auth.interface";
@@ -39,3 +41,32 @@ export const registerUser = createAsyncThunk<
     }
   },
 );
+export const resendVerificationEmail = createAsyncThunk<
+  IResendVerificationEmailResponse,
+  IResendVerificationEmailSchema,
+  { rejectValue: { success: boolean; message: string } }
+>("auth/resend-verify-email", async (data, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(
+      `${backendURL}/auth/resend-verify-email`,
+      data,
+      {
+        headers: { "Content-Type": "application/json" },
+
+        withCredentials: true,
+      },
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue({
+        success: false,
+        message: error.response?.data?.message || "Resend Email Failed",
+      });
+    }
+    return rejectWithValue({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+});

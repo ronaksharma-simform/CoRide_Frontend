@@ -3,13 +3,59 @@ import { Button } from "@/components/ui/button";
 import { MailCheck } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import React from "react";
+import { resendVerificationEmail } from "@/redux/auth.thunk";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { toast } from "sonner";
 
 const VerifyEmail = () => {
+  const dispatch = useAppDispatch();
+  const [timer, setTimer] = React.useState(60);
+  const state = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
-
+  let email = null;
   const [searchParams] = useSearchParams();
+  if (state.user) {
+    email = state.user.email;
+  } else {
+    email = searchParams.get("email");
+  }
+  const intervalId = React.useRef<NodeJS.Timeout | null>(null);
+  const handleClick = async () => {
+    try {
+      setTimeout(() => {
+        setTimer(60);
+      }, 1000);
+      console.log(state.user);
+      const response = await dispatch(
+        resendVerificationEmail({ email: email ?? "" }),
+      ).unwrap();
 
-  const email = searchParams.get("email");
+      toast.success(response.message);
+    } catch (error) {
+      if (
+        error instanceof Object &&
+        "message" in error &&
+        typeof error.message === "string"
+      ) {
+        toast.error(error.message);
+
+        return;
+      }
+      toast.error("Error occurs while resending the verification email");
+    }
+  };
+  React.useEffect(() => {
+    dispatch(resendVerificationEmail({ email: email ?? "" })).unwrap();
+    intervalId.current = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => {
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -26,7 +72,7 @@ const VerifyEmail = () => {
               We have sent a verification link to
             </p>
 
-            <p className="font-medium text-black break-all">{email}</p>
+            <p className="font-medium text-black break-all"></p>
 
             <p className="text-sm text-gray-500 mt-2">
               Please check your inbox and click the verification link to
@@ -42,8 +88,12 @@ const VerifyEmail = () => {
               Open Gmail
             </Button>
 
-            <Button variant="outline" className="w-full">
-              Resend Verification Email
+            <Button
+              variant="outline"
+              className={`w-full ${timer > 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+              onClick={handleClick}
+            >
+              Resend Verification Email {timer > 0 && `${timer}s`}
             </Button>
           </div>
 

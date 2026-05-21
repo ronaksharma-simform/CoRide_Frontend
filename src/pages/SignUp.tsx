@@ -53,7 +53,7 @@ const SignUp = () => {
 
       toast.success(response.message);
 
-      navigate("/home");
+      navigate("/verify-email");
     } catch (error) {
       if (
         error instanceof Object &&

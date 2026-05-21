@@ -47,6 +47,18 @@ const Login = () => {
         "message" in error &&
         typeof error.message === "string"
       ) {
+        if (error.message === "Account not verified") {
+          toast("Your account is not verified", {
+            description: "Please verify your email to login",
+            action: {
+              label: "Verify Now",
+              onClick: () => {
+                navigate(`/verify-email?email=${data.email}`);
+              },
+            },
+          });
+          return;
+        }
         toast.error(error.message);
         return;
       }
