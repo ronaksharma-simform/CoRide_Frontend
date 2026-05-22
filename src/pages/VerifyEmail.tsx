@@ -25,7 +25,6 @@ const VerifyEmail = () => {
       setTimeout(() => {
         setTimer(60);
       }, 1000);
-      console.log(state.user);
       const response = await dispatch(
         resendVerificationEmail({ email: email ?? "" }),
       ).unwrap();
@@ -83,7 +82,13 @@ const VerifyEmail = () => {
           <div className="w-full space-y-3">
             <Button
               className="w-full"
-              onClick={() => window.open("https://mail.google.com", "_blank")}
+              onClick={() =>
+                window.open(
+                  "https://mail.google.com",
+                  "_blank",
+                  "noopener,noreferrer",
+                )
+              }
             >
               Open Gmail
             </Button>
@@ -96,9 +101,8 @@ const VerifyEmail = () => {
               Resend Verification Email {timer > 0 && `${timer}s`}
             </Button>
           </div>
-
           <p className="text-sm text-gray-500">
-            Already verified?
+            Already verified?{" "}
             <button
               onClick={() => navigate("/login")}
               className="text-blue-600 hover:underline ml-1"

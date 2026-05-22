@@ -86,7 +86,6 @@ export const loginUser = createAsyncThunk<
     );
     return response.data;
   } catch (error) {
-    console.log(error);
     if (error instanceof AxiosError) {
       const errorMsg =
         error.response?.data.message ?? "Error occured while login ";

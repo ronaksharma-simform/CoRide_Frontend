@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { registerUser } from "@/redux/auth.slice";
 import { useAppDispatch } from "@/hooks/hooks";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -37,12 +36,11 @@ const Login = () => {
           password: data.password,
         }),
       ).unwrap();
-      console.log(response);
+
       toast.success(response.message);
 
       navigate("/home");
     } catch (error) {
-      console.log(error);
       if (
         error instanceof Object &&
         "message" in error &&

@@ -48,7 +48,6 @@ const SignUp = () => {
 
   const onSubmit = async (data: IUserRegistrationSchema) => {
     try {
-      console.log("Submitting data:", data); // Debug log
       const response = await dispatch(registerUser(data)).unwrap();
 
       toast.success(response.message);
