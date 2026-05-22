@@ -1,4 +1,4 @@
-import { AuthState, IUser } from "@/features/auth/types/auth.interface";
+import { AuthState, IUser } from "@/features/auth/types/auth.validations";
 import { createSlice } from "@reduxjs/toolkit";
 import { loginUser, registerUser, resendVerificationEmail } from "./auth.thunk";
 export interface LoginResponse {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import isAuthenticated from "./isAuthenicated";
+import isAuthenticated from "./isAuthenticated";
 
 const ProtectedRoutes = () => {
   return isAuthenticated() ? <Outlet /> : <Navigate to="/login" replace />;

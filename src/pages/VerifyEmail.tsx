@@ -71,7 +71,9 @@ const VerifyEmail = () => {
               We have sent a verification link to
             </p>
 
-            <p className="font-medium text-black break-all"></p>
+            <p className="font-medium text-black break-all">
+              {email || "your email address"}
+            </p>
 
             <p className="text-sm text-gray-500 mt-2">
               Please check your inbox and click the verification link to
@@ -97,6 +99,7 @@ const VerifyEmail = () => {
               variant="outline"
               className={`w-full ${timer > 0 ? "opacity-50 cursor-not-allowed" : ""}`}
               onClick={handleClick}
+              disabled={timer > 0}
             >
               Resend Verification Email {timer > 0 && `${timer}s`}
             </Button>
