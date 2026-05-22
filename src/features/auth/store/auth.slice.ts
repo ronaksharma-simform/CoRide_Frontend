@@ -1,11 +1,6 @@
 import { AuthState, IUser } from "@/features/auth/types/auth.interface";
 import { createSlice } from "@reduxjs/toolkit";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
-import { registerUser, resendVerificationEmail } from "./auth.thunk";
-
-const backendURL = "http://127.0.0.1:3000";
-
+import { loginUser, registerUser, resendVerificationEmail } from "./auth.thunk";
 export interface LoginResponse {
   success: boolean;
 
@@ -15,32 +10,7 @@ export interface LoginResponse {
 
   accessToken: string;
 }
-export const loginUser = createAsyncThunk<
-  LoginResponse,
-  { email: string; password: string },
-  { rejectValue: { sucess: boolean; message: string } }
->("auth/login", async ({ email, password }, { rejectWithValue }) => {
-  try {
-    const config = { headers: { "Content-Type": "application/json" } };
-    const response = await axios.post(
-      `${backendURL}/auth/login`,
-      { email, password },
-      config,
-    );
-    return response.data;
-  } catch (error) {
-    console.log(error);
-    if (error instanceof AxiosError) {
-      const errorMsg =
-        error.response?.data.message ?? "Error occured while login ";
-      return rejectWithValue({ sucess: false, message: errorMsg });
-    }
-    rejectWithValue({
-      sucess: false,
-      message: "Error occured while login",
-    });
-  }
-});
+
 const initialState: AuthState = {
   user: null,
 

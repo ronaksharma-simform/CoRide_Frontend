@@ -3,6 +3,7 @@ import {
   IResendVerificationEmailSchema,
   ISignupResponse,
   IUserRegistrationSchema,
+  LoginResponse,
 } from "@/features/auth/types/auth.interface";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
@@ -67,6 +68,33 @@ export const resendVerificationEmail = createAsyncThunk<
     return rejectWithValue({
       success: false,
       message: "Something went wrong",
+    });
+  }
+});
+
+export const loginUser = createAsyncThunk<
+  LoginResponse,
+  { email: string; password: string },
+  { rejectValue: { sucess: boolean; message: string } }
+>("auth/login", async ({ email, password }, { rejectWithValue }) => {
+  try {
+    const config = { headers: { "Content-Type": "application/json" } };
+    const response = await axios.post(
+      `${backendURL}/auth/login`,
+      { email, password },
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    if (error instanceof AxiosError) {
+      const errorMsg =
+        error.response?.data.message ?? "Error occured while login ";
+      return rejectWithValue({ sucess: false, message: errorMsg });
+    }
+    rejectWithValue({
+      sucess: false,
+      message: "Error occured while login",
     });
   }
 });
