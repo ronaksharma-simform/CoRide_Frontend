@@ -9,9 +9,9 @@ import { toast } from "sonner";
 
 const VerifyEmail = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [timer, setTimer] = React.useState(60);
   const state = useAppSelector((state) => state.auth);
-  const navigate = useNavigate();
   let email = null;
   const [searchParams] = useSearchParams();
   if (state.user) {
@@ -19,7 +19,7 @@ const VerifyEmail = () => {
   } else {
     email = searchParams.get("email");
   }
-  const intervalId = React.useRef<NodeJS.Timeout | null>(null);
+  const intervalId = React.useRef<ReturnType<typeof setInterval> | null>(null);
   const handleClick = async () => {
     try {
       setTimeout(() => {
@@ -44,7 +44,8 @@ const VerifyEmail = () => {
     }
   };
   React.useEffect(() => {
-    dispatch(resendVerificationEmail({ email: email ?? "" })).unwrap();
+    void handleClick();
+
     intervalId.current = setInterval(() => {
       setTimer((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);

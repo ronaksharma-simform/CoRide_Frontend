@@ -71,7 +71,6 @@ export const resendVerificationEmail = createAsyncThunk<
     });
   }
 });
-
 export const loginUser = createAsyncThunk<
   LoginResponse,
   { email: string; password: string },
@@ -91,7 +90,7 @@ export const loginUser = createAsyncThunk<
         error.response?.data.message ?? "Error occurred while login ";
       return rejectWithValue({ success: false, message: errorMsg });
     }
-    rejectWithValue({
+    return rejectWithValue({
       success: false,
       message: "Error occurred while login",
     });
