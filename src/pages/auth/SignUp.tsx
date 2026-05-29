@@ -10,7 +10,7 @@ import { useForm, Controller } from "react-hook-form";
 import {
   IUserRegistrationSchema,
   UserRegistrationSchema,
-} from "@/features/auth/types/auth.validations";
+} from "@/features/auth/validations/auth.validations";
 
 import { useAppDispatch } from "@/hooks/hooks";
 

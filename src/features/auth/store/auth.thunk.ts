@@ -4,7 +4,7 @@ import {
   ISignupResponse,
   IUserRegistrationSchema,
   LoginResponse,
-} from "@/features/auth/types/auth.validations";
+} from "@/features/auth/validations/auth.validations";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 

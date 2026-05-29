@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import {
   IUserLoginSchema,
   UserLoginSchema,
-} from "@/features/auth/types/auth.validations";
+} from "@/features/auth/validations/auth.validations";
 import { loginUser } from "@/features/auth/store/auth.thunk";
 const Login = () => {
   const {
