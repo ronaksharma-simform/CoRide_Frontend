@@ -3,7 +3,7 @@
     /* Language */
     "target": "ES2021",
     "lib": ["DOM", "DOM.Iterable", "ES2021"],
-
+    "types": ["node"],
     /* Module */
     "module": "ESNext",
     "moduleResolution": "Node",
