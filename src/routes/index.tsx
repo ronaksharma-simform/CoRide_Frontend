@@ -3,9 +3,11 @@ import { authRoutes } from "./auth.routes";
 import { homeRoutes } from "./home.routes";
 import NotFoundPage from "@/pages/NotFoundPage";
 import React from "react";
+import { vehicleRoutes } from "./vehicle.routes";
 
 export const router = createBrowserRouter([
   ...authRoutes,
   ...homeRoutes,
+  ...vehicleRoutes,
   { path: "*", element: <NotFoundPage /> },
 ]);

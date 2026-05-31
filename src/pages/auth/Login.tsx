@@ -38,7 +38,6 @@ const Login = () => {
       ).unwrap();
 
       toast.success(response.message);
-
       navigate("/home");
     } catch (error) {
       if (
