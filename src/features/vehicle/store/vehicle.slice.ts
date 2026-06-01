@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllVehicle, registerVehicle } from "./vehicle.thunk";
+import { deleteVehicle, getAllVehicle, registerVehicle } from "./vehicle.thunk";
 import { TVehicle } from "../validations/vehicle.validations";
 export interface TVehicleState {
   loading: boolean;
@@ -44,6 +44,21 @@ const vehicleSlice = createSlice({
       .addCase(getAllVehicle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || "Error getting the vehicles";
+      })
+      .addCase(deleteVehicle.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteVehicle.fulfilled, (state, action) => {
+        state.loading = false;
+        state.vehicle = state.vehicle.filter(
+          (v) => v.id !== action.payload.data.id,
+        );
+        state.error = null;
+      })
+      .addCase(deleteVehicle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Error deleting the vehicle";
       });
   },
 });

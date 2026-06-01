@@ -8,20 +8,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { TVehicle } from "@/features/vehicle/validations/vehicle.validations";
 import React from "react";
-
-interface VehicleCardProps {
-  vehicle: TVehicle;
-  onEdit?: (vehicle: TVehicle) => void;
-  onDelete?: (vehicle: TVehicle) => void;
-  onView?: (vehicle: TVehicle) => void;
-}
+import { useAppDispatch } from "@/hooks/hooks";
+import { deleteVehicle } from "@/features/vehicle/store/vehicle.thunk";
 
 export default function VehicleCard({
   vehicle,
-  onEdit,
-  onDelete,
-  onView,
-}: VehicleCardProps) {
+}: {
+  readonly vehicle: TVehicle;
+}) {
+  const dispatch = useAppDispatch();
+  const onDeleteClick = async () => {
+    await dispatch(
+      deleteVehicle({
+        id: vehicle.id!,
+      }),
+    );
+  };
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
@@ -48,15 +50,7 @@ export default function VehicleCard({
       </CardContent>
 
       <CardFooter className="flex gap-2">
-        <Button variant="outline" onClick={() => onView?.(vehicle)}>
-          View
-        </Button>
-
-        <Button variant="secondary" onClick={() => onEdit?.(vehicle)}>
-          Edit
-        </Button>
-
-        <Button variant="destructive" onClick={() => onDelete?.(vehicle)}>
+        <Button variant="destructive" onClick={onDeleteClick}>
           Delete
         </Button>
       </CardFooter>
