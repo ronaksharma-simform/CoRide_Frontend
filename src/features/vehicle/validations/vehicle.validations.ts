@@ -20,15 +20,21 @@ export const Vehicle = z.object({
     .string()
     .trim()
     .regex(/^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$/, "Invalid vehicle plate number"),
-  seatCapacity: z
-    .int("Seat number must be a number")
+  seatCapacity: z.coerce
+    .number("Seat number must be a number")
     .min(1, "Seat Capacity must be at least 1")
     .max(10, "Seat capacity cannot exceed 10"),
-  id: z.uuid("Vehicle Id is required "),
+  id: z.uuid("Vehicle Id is required ").optional(),
 });
 export type TVehicle = z.infer<typeof Vehicle>;
+export type TVehicleForm = z.input<typeof Vehicle>;
 export interface IVehicleResponse {
   success: boolean;
   message: string;
   data: TVehicle;
+}
+export interface IVehiclesResponse {
+  success: boolean;
+  message: string;
+  data: TVehicle[];
 }

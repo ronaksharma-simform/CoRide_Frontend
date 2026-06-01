@@ -1,10 +1,15 @@
-import { useAppSelector } from "@/hooks/hooks";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
-import { IVehicleResponse, TVehicle } from "../validations/vehicle.validations";
+import { AxiosError } from "axios";
+import {
+  IVehicleResponse,
+  IVehiclesResponse,
+  TVehicle,
+} from "../validations/vehicle.validations";
+import api from "@/services/api";
+// import api from "@/services/api";
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
-const userData = useAppSelector((state) => state.auth);
+
 export const registerVehicle = createAsyncThunk<
   IVehicleResponse,
   TVehicle,
@@ -16,11 +21,7 @@ export const registerVehicle = createAsyncThunk<
   }
 >("vehicle/register", async (data, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${backendURL}/api/vehicle`, data, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userData.accessToken}`,
-      },
+    const response = await api.post(`${backendURL}/api/vehicle`, data, {
       withCredentials: true,
     });
     return response.data;
@@ -30,6 +31,40 @@ export const registerVehicle = createAsyncThunk<
         success: false,
 
         message: error.response?.data?.message || "Vehicle Registration Failed",
+      });
+    }
+
+    return rejectWithValue({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+});
+export const getAllVehicle = createAsyncThunk<
+  IVehiclesResponse,
+  "",
+  {
+    rejectValue: {
+      success: boolean;
+      message: string;
+    };
+  }
+>("vehicle/getAllVehicle", async (data, { rejectWithValue }) => {
+  try {
+    const response = await api.post(
+      `${backendURL}/api/vehicle/vehicles`,
+      {},
+      {
+        withCredentials: true,
+      },
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue({
+        success: false,
+
+        message: error.response?.data?.message || "Error getting the vehicles",
       });
     }
 

@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { registerVehicle } from "@/features/vehicle/store/vehicle.thunk";
 import {
   TVehicle,
+  TVehicleForm,
   Vehicle,
 } from "@/features/vehicle/validations/vehicle.validations";
 import { useAppDispatch } from "@/hooks/hooks";
@@ -21,14 +23,13 @@ const Register = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<TVehicle>({
+  } = useForm<TVehicleForm>({
     defaultValues: {
       model: "",
       company: "",
       color: "",
       plateNumber: "",
       seatCapacity: 0,
-      id: "",
     },
     resolver: zodResolver(Vehicle),
   });
@@ -41,10 +42,9 @@ const Register = () => {
           color: data.color,
           seatCapacity: data.seatCapacity,
           plateNumber: data.plateNumber,
-          id: "",
         }),
       ).unwrap();
-
+      console.log(response);
       toast.success(response.message);
       navigate("/home");
     } catch (error) {
@@ -60,9 +60,9 @@ const Register = () => {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div>
       <Card className="w-full max-w-sm">
-        <CardContent className="flex flex-col items-center justify-center gap-4 p-6">
+        <DialogContent className="flex flex-col items-center justify-center gap-4 p-6">
           <h1 className="text-2xl font-bold">Register</h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -158,11 +158,13 @@ const Register = () => {
                 </p>
               )}
             </div>
+            {/* <DialogClose asChild> */}
             <Button className="w-full" type="submit">
               Login
             </Button>
+            {/* </DialogClose> */}
           </form>
-        </CardContent>
+        </DialogContent>
       </Card>
     </div>
   );
