@@ -5,7 +5,8 @@ import { Label } from "@/components/ui/label";
 import { registerVehicle } from "@/features/vehicle/store/vehicle.thunk";
 import {
   TVehicle,
-  Vehicle,
+  TVehicleForm,
+  VehicleRegistrationSchema,
 } from "@/features/vehicle/validations/vehicle.validations";
 import { useAppDispatch } from "@/hooks/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,16 +22,15 @@ const Register = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<TVehicle>({
+  } = useForm<TVehicleForm>({
     defaultValues: {
       model: "",
       company: "",
       color: "",
       plateNumber: "",
       seatCapacity: 0,
-      id: "",
     },
-    resolver: zodResolver(Vehicle),
+    resolver: zodResolver(VehicleRegistrationSchema),
   });
   const onSubmit = async (data: TVehicle) => {
     try {
@@ -41,11 +41,11 @@ const Register = () => {
           color: data.color,
           seatCapacity: data.seatCapacity,
           plateNumber: data.plateNumber,
-          id: "",
         }),
       ).unwrap();
 
       toast.success(response.message);
+
       navigate("/home");
     } catch (error) {
       if (
@@ -159,7 +159,7 @@ const Register = () => {
               )}
             </div>
             <Button className="w-full" type="submit">
-              Login
+              Register
             </Button>
           </form>
         </CardContent>

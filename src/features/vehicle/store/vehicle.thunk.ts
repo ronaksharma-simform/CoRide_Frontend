@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import {
   IVehicleResponse,
   IVehiclesResponse,
-  TVehicle,
+  TVehicleForm,
 } from "../validations/vehicle.validations";
 import api from "@/services/api";
 
@@ -11,7 +11,7 @@ const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 export const registerVehicle = createAsyncThunk<
   IVehicleResponse,
-  TVehicle,
+  TVehicleForm,
   {
     rejectValue: {
       success: boolean;

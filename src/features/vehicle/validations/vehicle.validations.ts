@@ -24,10 +24,13 @@ export const Vehicle = z.object({
     .number("Seat number must be a number")
     .min(1, "Seat Capacity must be at least 1")
     .max(10, "Seat capacity cannot exceed 10"),
-  id: z.uuid("Vehicle Id is required ").optional(),
+  id: z.uuid("Vehicle Id is required "),
+});
+export const VehicleRegistrationSchema = Vehicle.omit({
+  id: true,
 });
 export type TVehicle = z.infer<typeof Vehicle>;
-export type TVehicleForm = z.input<typeof Vehicle>;
+export type TVehicleForm = z.input<typeof VehicleRegistrationSchema>;
 export interface IVehicleResponse {
   success: boolean;
   message: string;

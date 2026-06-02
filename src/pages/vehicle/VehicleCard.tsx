@@ -20,7 +20,7 @@ export default function VehicleCard({
   const onDeleteClick = async () => {
     await dispatch(
       deleteVehicle({
-        id: vehicle.id!,
+        id: vehicle.id,
       }),
     );
   };
