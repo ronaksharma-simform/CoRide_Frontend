@@ -25,6 +25,7 @@ import {
 } from "@/features/ride/validations/ride.validations";
 import { registerRide } from "@/features/ride/store/ride.thunk";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const RideRegister = () => {
   const vehicleState = useAppSelector((state) => state.vehicle);
@@ -61,6 +62,7 @@ const RideRegister = () => {
   });
 
   const selectedVehicleId = watch("vehicleId");
+  const navigate = useNavigate();
 
   const source = watch("sourceLabel");
   const destination = watch("destinationLabel");
@@ -76,7 +78,7 @@ const RideRegister = () => {
       console.log(response);
       toast.success(response.message);
 
-      // navigate("/verify-email");
+      navigate("/home");
     } catch (error) {
       if (
         error instanceof Object &&

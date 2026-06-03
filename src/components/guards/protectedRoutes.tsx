@@ -3,14 +3,16 @@ import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
 
 const ProtectedRoutes = () => {
-  const { isAuthenticated, loading } = useAppSelector((state) => state.auth);
-  console.log("Yes", isAuthenticated, loading);
-  if (loading) {
+  const { isAuthenticated, authChecked } = useAppSelector(
+    (state) => state.auth,
+  );
+
+  if (!authChecked) {
     return <div>Loading...</div>;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   return <Outlet />;

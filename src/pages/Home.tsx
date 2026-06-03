@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import React, { useEffect } from "react";
 import { getAllVehicle } from "@/features/vehicle/store/vehicle.thunk";
 import VehicleCard from "./vehicle/VehicleCard";
+import { logoutUser } from "@/features/auth/store/auth.thunk";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -16,7 +17,6 @@ const Home = () => {
   useEffect(() => {
     dispatch(getAllVehicle());
   }, [dispatch]);
-  console.log(vehicle);
   const handleReq = async () => {
     const data = dispatch(getAllVehicle()).unwrap();
     console.log("clicked");
@@ -33,6 +33,7 @@ const Home = () => {
       </Button>
       <Button onClick={() => navigate("/ride/register")}>Ride Register</Button>
       <Button onClick={handleReq}>Vehicle</Button>
+      <Button onClick={() => dispatch(logoutUser())}>Logout</Button> <br />
       Vehicle List
       {vehicle.vehicle.map((v) => (
         <VehicleCard key={v.id} vehicle={v} />

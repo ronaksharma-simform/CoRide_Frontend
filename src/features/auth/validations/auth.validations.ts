@@ -150,6 +150,7 @@ export const AuthStateSchema = z.object({
   accessToken: z.string().nullable(),
   isAuthenticated: z.boolean(),
   loading: z.boolean(),
+  authChecked: z.boolean(),
   error: z.string().nullable(),
 });
 export const ResendVerificationEmailResponse = z.object({

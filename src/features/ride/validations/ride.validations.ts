@@ -64,6 +64,11 @@ export interface IRideResponseSchema {
   message: string;
   data: TRideDataSchema;
 }
+export interface IUserRideResponseSchema {
+  success: boolean;
+  message: string;
+  data: TRideDataSchema[];
+}
 export const RideUpdateSchema = RideFormSchema.omit({
   vehicleId: true,
 }).partial();
@@ -71,3 +76,7 @@ type TRideUpdateSchema = z.infer<typeof RideUpdateSchema>;
 type TRideUpdateData = z.infer<typeof RideUpdateData>;
 type TRide = z.infer<typeof RideFormSchema>;
 export { TRide, TRideUpdateSchema, TRideUpdateData, TRideDataSchema };
+export interface IRideDeleteReponseSchema {
+  success: boolean;
+  message: string;
+}
