@@ -1,4 +1,5 @@
 import {
+  IGetCurrentUserResponse,
   IResendVerificationEmailResponse,
   IResendVerificationEmailSchema,
   ISignupResponse,
@@ -72,9 +73,7 @@ export const loginUser = createAsyncThunk<
     const response = await api.post(
       "/auth/login",
       { email, password },
-      {
-        headers: { "Content-Type": "application/json" },
-      },
+      { headers: { "Content-Type": "application/json" } },
     );
     return response.data;
   } catch (error) {
@@ -86,6 +85,26 @@ export const loginUser = createAsyncThunk<
     return rejectWithValue({
       success: false,
       message: "Error occurred while login",
+    });
+  }
+});
+export const getCurrentUser = createAsyncThunk<
+  IGetCurrentUserResponse,
+  void,
+  { rejectValue: { success: boolean; message: string } }
+>("auth/currentUser", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get("/auth/me");
+
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue(error.response?.data);
+    }
+
+    return rejectWithValue({
+      message: "Something went wrong",
+      success: false,
     });
   }
 });

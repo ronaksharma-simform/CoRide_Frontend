@@ -175,3 +175,7 @@ export type IUserRegistrationSchema = z.infer<typeof UserRegistrationSchema>;
 export type IUserLoginSchema = z.infer<typeof UserLoginSchema>;
 
 export type ISignupResponse = z.infer<typeof SignupResponseSchema>;
+export interface IGetCurrentUserResponse {
+  success: boolean;
+  data: IUser;
+}

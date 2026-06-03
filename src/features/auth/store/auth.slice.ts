@@ -1,6 +1,11 @@
 import { AuthState, IUser } from "@/features/auth/validations/auth.validations";
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, registerUser, resendVerificationEmail } from "./auth.thunk";
+import {
+  getCurrentUser,
+  loginUser,
+  registerUser,
+  resendVerificationEmail,
+} from "./auth.thunk";
 export interface LoginResponse {
   success: boolean;
 
@@ -80,6 +85,24 @@ const authSlice = createSlice({
         state.user = null;
         state.error =
           action.payload?.message || "Resend Verification Email Failed";
+      })
+      .addCase(getCurrentUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(getCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.data;
+        state.isAuthenticated = true;
+      })
+
+      .addCase(getCurrentUser.rejected, (state, action) => {
+        state.loading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.error =
+          action.payload?.message || "Error while retrieving user detail";
       });
   },
 });
