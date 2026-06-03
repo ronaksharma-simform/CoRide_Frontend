@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   MapContainer,
   Marker,
@@ -8,49 +8,30 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import { LeafletMouseEvent } from "leaflet";
-import "leaflet/dist/leaflet.css";
-
+import simplify from "simplify-js";
 import { Button } from "@/components/ui/button";
-
-type Coordinate = {
+import "leaflet/dist/leaflet.css";
+export type Coordinate = {
   lat: number;
   lng: number;
 };
 
-const parseUrlWaypoints = (search: string): Coordinate[] => {
-  const params = new URLSearchParams(search);
-  const query = params.get("waypoints") || params.get("coords");
+interface RouteSelectorMapProps {
+  onRouteSelected: (data: {
+    sourceLabel: Coordinate;
+    destinationLabel: Coordinate;
+    route: Coordinate[];
+  }) => void;
+}
 
-  if (!query) {
-    return [];
-  }
-
-  return query
-    .split(";")
-    .map((item) => {
-      const [latString, lngString] = item.split(",");
-
-      const lat = Number(latString);
-      const lng = Number(lngString);
-
-      return Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null;
-    })
-    .filter((point): point is Coordinate => point !== null);
-};
-
-const Map = () => {
-  const mapRef = useRef(null);
-
-  const [coords, setCoords] = useState<Coordinate[]>([]);
+const RouteSelectorMap = ({ onRouteSelected }: RouteSelectorMapProps) => {
+  const [points, setPoints] = useState<Coordinate[]>([]);
   const [route, setRoute] = useState<[number, number][]>([]);
-
-  const latitude = 22.995529;
-  const longitude = 72.501279;
 
   function MapClickHandler() {
     useMapEvents({
       click(e: LeafletMouseEvent) {
-        setCoords((prev) => [
+        setPoints((prev) => [
           ...prev,
           {
             lat: e.latlng.lat,
@@ -63,86 +44,80 @@ const Map = () => {
     return null;
   }
 
-  const generateRoute = async (points: Coordinate[]) => {
-    try {
-      if (points.length < 2) {
-        return;
-      }
+  const generateRoute = async () => {
+    if (points.length < 2) return;
 
-      const coordinateString = points
-        .map((point) => `${point.lng},${point.lat}`)
-        .join(";");
+    const coordinateString = points
+      .map((point) => `${point.lng},${point.lat}`)
+      .join(";");
 
-      const url =
-        `https://router.project-osrm.org/route/v1/driving/${coordinateString}` +
-        "?overview=full&geometries=geojson";
+    const response = await fetch(
+      `https://router.project-osrm.org/route/v1/driving/${coordinateString}?overview=full&geometries=geojson`,
+    );
 
-      console.log(url);
+    const data = await response.json();
 
-      const response = await fetch(url);
+    const coordinates = data.routes?.[0]?.geometry?.coordinates ?? [];
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch route");
-      }
+    const leafletCoordinates = coordinates.map(
+      ([lng, lat]: [number, number]) => [lat, lng] as [number, number],
+    );
 
-      const data = await response.json();
-
-      const coordinates = data.routes?.[0]?.geometry?.coordinates ?? [];
-
-      const leafletCoordinates = coordinates.map(
-        ([lng, lat]: [number, number]) => [lat, lng] as [number, number],
-      );
-
-      setRoute(leafletCoordinates);
-    } catch (error) {
-      console.error("Route generation failed", error);
-    }
+    setRoute(leafletCoordinates);
   };
 
-  useEffect(() => {
-    const initialCoords = parseUrlWaypoints(window.location.search);
+  const saveRoute = () => {
+    if (points.length < 2 || route.length === 0) return;
 
-    if (initialCoords.length > 0) {
-      setCoords(initialCoords);
-    }
-  }, []);
+    const simplifyInput = route.map((point) => ({
+      x: point[0],
+      y: point[1],
+    }));
 
-  useEffect(() => {
-    if (coords.length >= 2) {
-      generateRoute(coords);
-    } else {
-      setRoute([]);
-    }
-  }, [coords]);
+    const simplified = simplify(simplifyInput, 0.0001, true);
 
-  const clearMap = () => {
-    setCoords([]);
-    setRoute([]);
-  };
-
-  const removeLastPoint = () => {
-    setCoords((prev) => prev.slice(0, -1));
+    const simplifiedRoute: Coordinate[] = simplified.map((point) => ({
+      lat: point.x,
+      lng: point.y,
+    }));
+    console.log(route);
+    console.log(simplifiedRoute);
+    onRouteSelected({
+      sourceLabel: points[0],
+      destinationLabel: points[points.length - 1],
+      route: simplifiedRoute,
+    });
   };
 
   return (
-    <>
-      <div className="flex gap-2 p-4">
-        <Button onClick={() => generateRoute(coords)}>Generate Route</Button>
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <Button onClick={generateRoute}>Generate Route</Button>
 
-        <Button variant="outline" onClick={removeLastPoint}>
-          Undo Last Point
+        <Button
+          variant="secondary"
+          onClick={() => setPoints((prev) => prev.slice(0, -1))}
+        >
+          Undo
         </Button>
 
-        <Button variant="destructive" onClick={clearMap}>
+        <Button
+          variant="destructive"
+          onClick={() => {
+            setPoints([]);
+            setRoute([]);
+          }}
+        >
           Clear
         </Button>
+
+        <Button onClick={saveRoute}>Save Route</Button>
       </div>
 
-      <div className="h-screen w-screen">
+      <div className="h-[800px] w-full">
         <MapContainer
-          center={[latitude, longitude]}
-          zoom={13}
-          ref={mapRef}
+          center={[23.0225, 72.5714]}
+          zoom={12}
           style={{
             height: "100%",
             width: "100%",
@@ -155,36 +130,17 @@ const Map = () => {
 
           <MapClickHandler />
 
-          {coords.map((point, index) => {
-            let label = `Waypoint ${index}`;
-
-            if (index === 0) {
-              label = "Source";
-            } else if (index === coords.length - 1) {
-              label = "Destination";
-            }
-
-            return (
-              <Marker key={index} position={[point.lat, point.lng]}>
-                <Popup>
-                  {label}
-                  <br />
-                  {point.lat.toFixed(6)},{point.lng.toFixed(6)}
-                </Popup>
-              </Marker>
-            );
-          })}
-
-          {coords.length > 1 && (
-            <Polyline
-              positions={coords.map((point) => [point.lat, point.lng])}
-              pathOptions={{
-                color: "blue",
-                weight: 2,
-                dashArray: "5, 10",
-              }}
-            />
-          )}
+          {points.map((point, index) => (
+            <Marker key={index} position={[point.lat, point.lng]}>
+              <Popup>
+                {index === 0
+                  ? "Source"
+                  : index === points.length - 1
+                    ? "Destination"
+                    : `Waypoint ${index}`}
+              </Popup>
+            </Marker>
+          ))}
 
           {route.length > 0 && (
             <Polyline
@@ -197,8 +153,8 @@ const Map = () => {
           )}
         </MapContainer>
       </div>
-    </>
+    </div>
   );
 };
 
-export default Map;
+export default RouteSelectorMap;

@@ -1,17 +1,10 @@
-// import {
-//   IResendVerificationEmailResponse,
-//   IResendVerificationEmailSchema,
-//   ISignupResponse,
-//   IUserRegistrationSchema,
-//   LoginResponse,
-// } from "@/features/auth/validations/auth.validations";
 import api from "@/services/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { TRide } from "../validations/ride.validations";
+import { IRideResponseSchema, TRide } from "../validations/ride.validations";
 
 export const registerRide = createAsyncThunk<
-  ISignupResponse,
+  IRideResponseSchema,
   TRide,
   { rejectValue: { success: boolean; message: string } }
 >(

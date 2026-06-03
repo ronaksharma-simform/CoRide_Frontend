@@ -31,6 +31,7 @@ const Home = () => {
       <Button onClick={() => navigate("/vehicle/register")}>
         Vehicle Register
       </Button>
+      <Button onClick={() => navigate("/ride/register")}>Ride Register</Button>
       <Button onClick={handleReq}>Vehicle</Button>
       Vehicle List
       {vehicle.vehicle.map((v) => (

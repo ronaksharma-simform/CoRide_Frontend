@@ -18,49 +18,56 @@ type TRideDataSchema = {
   createdAt: Date;
   updatedAt: Date;
 };
-export const Ride = z.object({
-  vehicleId: z.string().uuid("Vehicle Id is required"), // Fixed: z.string().uuid()
-  sourceLabel: cooridinateSchema,
-  destinationLabel: cooridinateSchema,
-  route: z.array(cooridinateSchema),
 
-  // Dynamic date check that handles partial/optional updates correctly
-  departureTime: z.coerce.date().superRefine((date, ctx) => {
-    if (date <= new Date()) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Departure must be in the future",
-      });
-    }
+export const CoordinateSchema = z.object({
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
+});
+
+export const RideFormSchema = z.object({
+  vehicleId: z.string().uuid("Vehicle Id is required"),
+
+  sourceLabel: CoordinateSchema.optional(),
+
+  destinationLabel: CoordinateSchema.optional(),
+
+  route: z.array(CoordinateSchema).default([]),
+
+  departureTime: z.coerce.date().refine((date) => date > new Date(), {
+    message: "Departure must be in the future",
   }),
 
-  totalSeats: z
-    .number() // Fixed: z.number().int()
+  totalSeats: z.coerce
+    .number()
     .int("Seat number must be an integer")
     .min(1, "Seat Capacity must be at least 1")
     .max(10, "Seat capacity cannot exceed 10"),
 
-  availableSeats: z
-    .number() // Fixed: z.number().int()
+  availableSeats: z.coerce
+    .number()
     .int("Seat number must be an integer")
-    .min(0, "Seat Capacity must be a positive number")
-    .max(10, "Seat capacity cannot exceed 10"),
+    .min(0, "Available seats cannot be negative")
+    .max(10, "Available seats cannot exceed 10"),
 
   status: z
     .enum(["ACTIVE", "FULL", "COMPLETED", "CANCELLED"])
     .default("ACTIVE"),
 });
+
+export type TRideForm = z.infer<typeof RideFormSchema>;
 export const RideUpdateData = z.object({
   id: z.string(),
-  data: Ride.omit({ vehicleId: true }).partial(),
+  data: RideFormSchema.omit({ vehicleId: true }).partial(),
 });
 export interface IRideResponseSchema {
   success: boolean;
   message: string;
   data: TRideDataSchema;
 }
-export const RideUpdateSchema = Ride.omit({ vehicleId: true }).partial();
+export const RideUpdateSchema = RideFormSchema.omit({
+  vehicleId: true,
+}).partial();
 type TRideUpdateSchema = z.infer<typeof RideUpdateSchema>;
 type TRideUpdateData = z.infer<typeof RideUpdateData>;
-type TRide = z.infer<typeof Ride>;
+type TRide = z.infer<typeof RideFormSchema>;
 export { TRide, TRideUpdateSchema, TRideUpdateData, TRideDataSchema };
