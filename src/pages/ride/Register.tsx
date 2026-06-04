@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -25,14 +25,18 @@ import {
 } from "@/features/ride/validations/ride.validations";
 import { registerRide } from "@/features/ride/store/ride.thunk";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { getAllVehicle } from "@/features/vehicle/store/vehicle.thunk";
 
-const RideRegister = () => {
-  const vehicleState = useAppSelector((state) => state.vehicle);
+const RideRegister = ({ onSuccess }: { onSuccess: () => void }) => {
   const dispatch = useAppDispatch();
   const [showMap, setShowMap] = useState(false);
   const [routeSelected, setRouteSelected] = useState(false);
-
+  const vehicleState = useAppSelector((state) => state.vehicle);
+  const ride = useAppSelector((state) => state.ride);
+  console.log(ride);
+  useEffect(() => {
+    dispatch(getAllVehicle());
+  }, [dispatch]);
   const {
     control,
     watch,
@@ -62,7 +66,6 @@ const RideRegister = () => {
   });
 
   const selectedVehicleId = watch("vehicleId");
-  const navigate = useNavigate();
 
   const source = watch("sourceLabel");
   const destination = watch("destinationLabel");
@@ -74,11 +77,13 @@ const RideRegister = () => {
 
   const onSubmit = async (data: TRideForm) => {
     try {
+      if (selectedVehicle?.seatCapacity) {
+        data.totalSeats = selectedVehicle.seatCapacity;
+      }
       const response = await dispatch(registerRide(data)).unwrap();
       console.log(response);
       toast.success(response.message);
-
-      navigate("/home");
+      onSuccess();
     } catch (error) {
       if (
         error instanceof Object &&

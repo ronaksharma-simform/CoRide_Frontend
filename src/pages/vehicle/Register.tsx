@@ -12,12 +12,10 @@ import { useAppDispatch } from "@/hooks/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const Register = () => {
+const Register = ({ onSuccess }: { onSuccess: () => void }) => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -46,7 +44,7 @@ const Register = () => {
 
       toast.success(response.message);
 
-      navigate("/home");
+      onSuccess();
     } catch (error) {
       if (
         error instanceof Object &&
