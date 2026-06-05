@@ -1,0 +1,43 @@
+import { z } from "zod";
+
+export const Vehicle = z.object({
+  model: z
+    .string()
+    .trim()
+    .min(1, "Model is required")
+    .max(20, "Model name is too long"),
+  company: z
+    .string()
+    .trim()
+    .min(2, "Company name must be at least 2 characters")
+    .max(20, "Company name is too long"),
+  color: z
+    .string()
+    .trim()
+    .min(2, "Color is required")
+    .max(20, "Color name is too long"),
+  plateNumber: z
+    .string()
+    .trim()
+    .regex(/^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$/, "Invalid vehicle plate number"),
+  seatCapacity: z.coerce
+    .number("Seat number must be a number")
+    .min(1, "Seat Capacity must be at least 1")
+    .max(10, "Seat capacity cannot exceed 10"),
+  id: z.uuid("Vehicle Id is required "),
+});
+export const VehicleRegistrationSchema = Vehicle.omit({
+  id: true,
+});
+export type TVehicle = z.infer<typeof Vehicle>;
+export type TVehicleForm = z.input<typeof VehicleRegistrationSchema>;
+export interface IVehicleResponse {
+  success: boolean;
+  message: string;
+  data: TVehicle;
+}
+export interface IVehiclesResponse {
+  success: boolean;
+  message: string;
+  data: TVehicle[];
+}

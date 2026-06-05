@@ -1,14 +1,15 @@
 import {
+  IGetCurrentUserResponse,
   IResendVerificationEmailResponse,
   IResendVerificationEmailSchema,
   ISignupResponse,
   IUserRegistrationSchema,
   LoginResponse,
 } from "@/features/auth/validations/auth.validations";
+import api from "@/services/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 
-const backendURL = import.meta.env.VITE_BACKEND_URL;
 export const registerUser = createAsyncThunk<
   ISignupResponse,
   IUserRegistrationSchema,
@@ -18,10 +19,8 @@ export const registerUser = createAsyncThunk<
 
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${backendURL}/auth/register`, data, {
+      const response = await api.post("/auth/register", data, {
         headers: { "Content-Type": "application/json" },
-
-        withCredentials: true,
       });
 
       return response.data;
@@ -48,15 +47,9 @@ export const resendVerificationEmail = createAsyncThunk<
   { rejectValue: { success: boolean; message: string } }
 >("auth/resend-verify-email", async (data, { rejectWithValue }) => {
   try {
-    const response = await axios.post(
-      `${backendURL}/auth/resend-verify-email`,
-      data,
-      {
-        headers: { "Content-Type": "application/json" },
-
-        withCredentials: true,
-      },
-    );
+    const response = await api.post("/auth/resend-verify-email", data, {
+      headers: { "Content-Type": "application/json" },
+    });
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -77,11 +70,10 @@ export const loginUser = createAsyncThunk<
   { rejectValue: { success: boolean; message: string } }
 >("auth/login", async ({ email, password }, { rejectWithValue }) => {
   try {
-    const config = { headers: { "Content-Type": "application/json" } };
-    const response = await axios.post(
-      `${backendURL}/auth/login`,
+    const response = await api.post(
+      "/auth/login",
       { email, password },
-      config,
+      { headers: { "Content-Type": "application/json" } },
     );
     return response.data;
   } catch (error) {
@@ -93,6 +85,46 @@ export const loginUser = createAsyncThunk<
     return rejectWithValue({
       success: false,
       message: "Error occurred while login",
+    });
+  }
+});
+export const getCurrentUser = createAsyncThunk<
+  IGetCurrentUserResponse,
+  void,
+  { rejectValue: { success: boolean; message: string } }
+>("auth/currentUser", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get("/auth/me");
+
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue(error.response?.data);
+    }
+
+    return rejectWithValue({
+      message: "Something went wrong",
+      success: false,
+    });
+  }
+});
+
+export const logoutUser = createAsyncThunk<
+  void,
+  void,
+  { rejectValue: { success: boolean; message: string } }
+>("auth/logout", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.post("/auth/logout");
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue(error.response?.data);
+    }
+
+    return rejectWithValue({
+      message: "Something went wrong",
+      success: false,
     });
   }
 });

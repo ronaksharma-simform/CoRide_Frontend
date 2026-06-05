@@ -1,6 +1,12 @@
 import { AuthState, IUser } from "@/features/auth/validations/auth.validations";
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, registerUser, resendVerificationEmail } from "./auth.thunk";
+import {
+  getCurrentUser,
+  loginUser,
+  logoutUser,
+  registerUser,
+  resendVerificationEmail,
+} from "./auth.thunk";
 export interface LoginResponse {
   success: boolean;
 
@@ -20,6 +26,8 @@ const initialState: AuthState = {
 
   loading: false,
 
+  authChecked: false,
+
   error: null,
 };
 
@@ -35,6 +43,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
+        state.authChecked = true;
         state.isAuthenticated = true;
         state.accessToken = action.payload.accessToken;
         state.user = action.payload.data;
@@ -42,6 +51,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
+        state.authChecked = true;
         state.isAuthenticated = false;
         state.accessToken = null;
         state.user = null;
@@ -53,12 +63,14 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
+        state.authChecked = true;
         state.isAuthenticated = false;
         state.error = null;
         state.user = action.payload.data;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
+        state.authChecked = true;
         state.isAuthenticated = false;
         state.accessToken = null;
         state.user = null;
@@ -70,16 +82,57 @@ const authSlice = createSlice({
       })
       .addCase(resendVerificationEmail.fulfilled, (state) => {
         state.loading = false;
+        state.authChecked = true;
         state.isAuthenticated = false;
         state.error = null;
       })
       .addCase(resendVerificationEmail.rejected, (state, action) => {
         state.loading = false;
+        state.authChecked = true;
         state.isAuthenticated = false;
         state.accessToken = null;
         state.user = null;
         state.error =
           action.payload?.message || "Resend Verification Email Failed";
+      })
+      .addCase(getCurrentUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(getCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.authChecked = true;
+        state.user = action.payload.data;
+        state.isAuthenticated = true;
+      })
+
+      .addCase(getCurrentUser.rejected, (state, action) => {
+        state.loading = false;
+        state.authChecked = true;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.error =
+          action.payload?.message || "Error while retrieving user detail";
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.loading = false;
+        state.authChecked = true;
+        state.user = null;
+        state.isAuthenticated = false;
+      })
+
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.loading = false;
+        state.authChecked = true;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.error = action.payload?.message || "Error while logout";
       });
   },
 });
