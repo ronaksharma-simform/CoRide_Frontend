@@ -17,7 +17,7 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
-import RouteSelectorMap from "../Map";
+import RouteSelectorMap from "./Map";
 
 import {
   RideFormSchema,

@@ -14,7 +14,7 @@ import {
 } from "@/features/ride/validations/ride.validations";
 import { useAppDispatch } from "@/hooks/hooks";
 import { updateRide } from "@/features/ride/store/ride.thunk";
-import RouteSelectorMap from "../Map";
+import RouteSelectorMap from "./Map";
 
 interface RideUpdateProps {
   ride: TRideDataSchema;

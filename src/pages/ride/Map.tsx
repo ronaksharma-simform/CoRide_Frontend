@@ -131,7 +131,10 @@ const RouteSelectorMap = ({ onRouteSelected }: RouteSelectorMapProps) => {
           <MapClickHandler />
 
           {points.map((point, index) => (
-            <Marker key={index} position={[point.lat, point.lng]}>
+            <Marker
+              key={`${point.lat}-${point.lng}`}
+              position={[point.lat, point.lng]}
+            >
               <Popup>
                 {index === 0
                   ? "Source"

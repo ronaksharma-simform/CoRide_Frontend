@@ -5,6 +5,7 @@ import { router } from "./routes";
 import { getCurrentUser } from "./features/auth/store/auth.thunk";
 import { useAppDispatch, useAppSelector } from "./hooks/hooks";
 import { Toaster } from "sonner";
+import { Spinner } from "./components/ui/spinner";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -19,7 +20,7 @@ function App() {
   if (!authChecked) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <p className="text-xl">Loading...</p>
+        <Spinner />
       </div>
     );
   }

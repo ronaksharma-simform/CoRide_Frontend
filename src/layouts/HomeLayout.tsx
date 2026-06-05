@@ -13,17 +13,11 @@ import MyVehiclesDashboard from "./VehicleLayout";
 import { useAppDispatch } from "@/hooks/hooks";
 import { logoutUser } from "@/features/auth/store/auth.thunk";
 import { toast } from "sonner";
-
-// Import your existing dashboard components here:
-// import MyRidesDashboard from "./MyRidesDashboard";
-// import MyVehiclesDashboard from "./MyVehiclesDashboard";
-// import CoRideHomeLayout from "./CoRideHomeLayout";
+import FindRide from "@/pages/ride/FindRide";
 
 export default function AppLayout() {
-  // 1. Persisted State Management
-  // Initialize state from localStorage, default to 'home' if empty
   const [activeView, setActiveView] = useState(() => {
-    if (typeof window !== "undefined") {
+    if (typeof globalThis.window !== "undefined") {
       return localStorage.getItem("coride_active_view") || "home";
     }
     return "home";
@@ -54,6 +48,8 @@ export default function AppLayout() {
         return <MyRidesDashboard />;
       case "vehicles":
         return <MyVehiclesDashboard />;
+      case "findRide":
+        return <FindRide />;
       default:
         return <div>View not found</div>;
     }
@@ -90,6 +86,12 @@ export default function AppLayout() {
             label="My Vehicles"
             isActive={activeView === "vehicles"}
             onClick={() => setActiveView("vehicles")}
+          />
+          <NavItem
+            icon={<CarFront />}
+            label="Find Ride"
+            isActive={activeView === "findRide"}
+            onClick={() => setActiveView("findRide")}
           />
         </nav>
 
