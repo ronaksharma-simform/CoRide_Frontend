@@ -19,7 +19,7 @@ const initialState: TRideState = {
   ride: [],
 };
 
-const vehicleSlice = createSlice({
+const rideSlice = createSlice({
   name: "ride",
   initialState,
   reducers: {},
@@ -92,4 +92,4 @@ const vehicleSlice = createSlice({
       });
   },
 });
-export default vehicleSlice.reducer;
+export default rideSlice.reducer;

@@ -5,6 +5,7 @@ import React from "react";
 import { RouteObject } from "react-router-dom";
 import VehiclesDashboard from "@/layouts/VehicleLayout";
 import CoRideWebDashboard from "@/layouts/HomeLayout";
+import FindRideDashboard from "@/pages/ride/FindRide";
 
 export const homeRoutes: RouteObject[] = [
   { path: "/", element: <LandingPage /> },
@@ -16,6 +17,7 @@ export const homeRoutes: RouteObject[] = [
       { path: "/ride", element: <CoRideHomeLayout /> },
       { path: "/vehicle", element: <VehiclesDashboard /> },
       { path: "/home", element: <CoRideWebDashboard /> },
+      { path: "/findRide", element: <FindRideDashboard /> },
     ],
   },
 ];

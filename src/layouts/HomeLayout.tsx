@@ -13,7 +13,7 @@ import MyVehiclesDashboard from "./VehicleLayout";
 import { useAppDispatch } from "@/hooks/hooks";
 import { logoutUser } from "@/features/auth/store/auth.thunk";
 import { toast } from "sonner";
-import FindRide from "@/pages/ride/FindRide";
+import FindRideDashboard from "@/pages/ride/FindRide";
 
 export default function AppLayout() {
   const [activeView, setActiveView] = useState(() => {
@@ -49,7 +49,7 @@ export default function AppLayout() {
       case "vehicles":
         return <MyVehiclesDashboard />;
       case "findRide":
-        return <FindRide />;
+        return <FindRideDashboard />;
       default:
         return <div>View not found</div>;
     }
@@ -68,7 +68,7 @@ export default function AppLayout() {
         </div>
 
         {/* Navigation Links */}
-        <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+        <nav className="flex-1  py-6 px-4 space-y-2">
           <NavItem
             icon={<LayoutDashboard />}
             label="Overview"

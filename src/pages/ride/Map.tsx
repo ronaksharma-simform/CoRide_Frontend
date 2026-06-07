@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MapContainer,
   Marker,
   Polyline,
   Popup,
   TileLayer,
+  useMap,
   useMapEvents,
 } from "react-leaflet";
 import { LeafletMouseEvent } from "leaflet";
 import simplify from "simplify-js";
 import { Button } from "@/components/ui/button";
 import "leaflet/dist/leaflet.css";
+import LocationAutocomplete from "@/components/LocationAutoComplete";
+import { MapPin } from "lucide-react";
 export type Coordinate = {
   lat: number;
   lng: number;
@@ -27,6 +30,7 @@ interface RouteSelectorMapProps {
 const RouteSelectorMap = ({ onRouteSelected }: RouteSelectorMapProps) => {
   const [points, setPoints] = useState<Coordinate[]>([]);
   const [route, setRoute] = useState<[number, number][]>([]);
+  const [mapCenter, setMapCenter] = useState<Coordinate | null>(null);
 
   function MapClickHandler() {
     useMapEvents({
@@ -40,6 +44,18 @@ const RouteSelectorMap = ({ onRouteSelected }: RouteSelectorMapProps) => {
         ]);
       },
     });
+
+    return null;
+  }
+
+  function MapCenterUpdater({ center }: { center: Coordinate | null }) {
+    const map = useMap();
+
+    useEffect(() => {
+      if (center) {
+        map.setView([center.lat, center.lng], map.getZoom());
+      }
+    }, [center, map]);
 
     return null;
   }
@@ -90,10 +106,12 @@ const RouteSelectorMap = ({ onRouteSelected }: RouteSelectorMapProps) => {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex gap-2">
+    <div className="space-y-4 z-10 ">
+      <div className="flex gap-2 relative z-50">
         <Button onClick={generateRoute}>Generate Route</Button>
+        <br />
 
+        <br />
         <Button
           variant="secondary"
           onClick={() => setPoints((prev) => prev.slice(0, -1))}
@@ -112,6 +130,17 @@ const RouteSelectorMap = ({ onRouteSelected }: RouteSelectorMapProps) => {
         </Button>
 
         <Button onClick={saveRoute}>Save Route</Button>
+        <div className="relative z-50">
+          <LocationAutocomplete
+            icon={MapPin}
+            placeholder={"Enter Source Destination "}
+            iconColor="red"
+            onSearchSelect={(coords, name) => {
+              setMapCenter(coords);
+              console.log(coords, name);
+            }}
+          />
+        </div>
       </div>
 
       <div className="h-[800px] w-full">
@@ -129,6 +158,7 @@ const RouteSelectorMap = ({ onRouteSelected }: RouteSelectorMapProps) => {
           />
 
           <MapClickHandler />
+          <MapCenterUpdater center={mapCenter} />
 
           {points.map((point, index) => (
             <Marker

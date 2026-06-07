@@ -10,4 +10,13 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  server: {
+    proxy: {
+      "/photon": {
+        target: "https://photon.komoot.io",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/photon/, ""),
+      },
+    },
+  },
 });

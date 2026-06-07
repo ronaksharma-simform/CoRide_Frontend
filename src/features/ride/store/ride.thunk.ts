@@ -133,6 +133,7 @@ export const getRide = createAsyncThunk<
     }
   },
 );
+
 export const getUserRides = createAsyncThunk<
   IUserRideResponseSchema,
   void,

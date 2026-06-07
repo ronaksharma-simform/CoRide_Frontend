@@ -53,7 +53,34 @@ export const RideFormSchema = z.object({
     .enum(["ACTIVE", "FULL", "COMPLETED", "CANCELLED"])
     .default("ACTIVE"),
 });
+export const findRideSchema = z.object({
+  source: cooridinateSchema,
+  destination: cooridinateSchema,
 
+  seats: z
+    .number()
+    .int("Seat number must be an integer")
+    .min(1, "You must request at least 1 seat")
+    .max(10, "Seat capacity cannot exceed 10"),
+
+  priority: z.enum(["TIME", "DISTANCE"]).default("TIME"),
+
+  departureTime: z.coerce.date().refine((date) => date > new Date(), {
+    message: "Departure must be in the future",
+  }),
+
+  maxTimeWindowHours: z
+    .number()
+    .min(0.1, "Minimum time window is 10 minutes")
+    .max(24, "Maximum time window is 24 hours")
+    .default(1.0),
+  maxWalkingDistanceMeters: z
+    .number()
+    .int()
+    .min(100, "Distance threshold must be at least 100 meters")
+    .max(10000, "Distance threshold cannot exceed 10 kilometers")
+    .default(1000),
+});
 export type TRideForm = z.infer<typeof RideFormSchema>;
 export const RideUpdateData = z.object({
   id: z.string(),
@@ -72,6 +99,7 @@ export interface IUserRideResponseSchema {
 export const RideUpdateSchema = RideFormSchema.omit({
   vehicleId: true,
 }).partial();
+export type TFindRideRequestSchema = z.infer<typeof findRideSchema>;
 type TRideUpdateSchema = z.infer<typeof RideUpdateSchema>;
 type TRideUpdateData = z.infer<typeof RideUpdateData>;
 type TRide = z.infer<typeof RideFormSchema>;
@@ -79,4 +107,8 @@ export { TRide, TRideUpdateSchema, TRideUpdateData, TRideDataSchema };
 export interface IRideDeleteReponseSchema {
   success: boolean;
   message: string;
+}
+export interface TRideFindDataSchema extends TRideDataSchema {
+  distanceMeter: number;
+  priority: "TIME" | "DISTANCE";
 }
