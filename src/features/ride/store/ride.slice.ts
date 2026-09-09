@@ -1,8 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TRideDataSchema } from "../validations/ride.validations";
 import {
+  TRideAvailableSchema,
+  TRideDataSchema,
+  TRideSeatLayoutSchema,
+} from "../validations/ride.validations";
+import {
+  bookSeat,
   deleteRide,
+  getAvailableRides,
   getRide,
+  getRideSeatLayout,
   getUserRides,
   registerRide,
   updateRide,
@@ -11,18 +18,27 @@ export interface TRideState {
   loading: boolean;
   error: string | null;
   ride: TRideDataSchema[];
+  availableRides: TRideAvailableSchema[];
+  seatLayout: TRideSeatLayoutSchema | null;
 }
 
 const initialState: TRideState = {
   loading: false,
   error: "",
   ride: [],
+  availableRides: [],
+  seatLayout: null,
 };
 
-const vehicleSlice = createSlice({
+const rideSlice = createSlice({
   name: "ride",
   initialState,
-  reducers: {},
+  reducers: {
+    clearSeatLayout: (state) => {
+      state.seatLayout = null;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerRide.pending, (state) => {
@@ -89,7 +105,46 @@ const vehicleSlice = createSlice({
       .addCase(getUserRides.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || "Failed to load ride data";
+      })
+      .addCase(getAvailableRides.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAvailableRides.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.availableRides = action.payload.data;
+      })
+      .addCase(getAvailableRides.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Failed to load ride data";
+      })
+      .addCase(getRideSeatLayout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getRideSeatLayout.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.seatLayout = action.payload.data;
+      })
+      .addCase(getRideSeatLayout.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Failed to load seat layout";
+      })
+      .addCase(bookSeat.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(bookSeat.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(bookSeat.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Failed to book the seat";
       });
   },
 });
-export default vehicleSlice.reducer;
+export const { clearSeatLayout } = rideSlice.actions;
+export default rideSlice.reducer;

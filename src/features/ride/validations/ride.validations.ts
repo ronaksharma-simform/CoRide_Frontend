@@ -80,3 +80,78 @@ export interface IRideDeleteReponseSchema {
   success: boolean;
   message: string;
 }
+// ============================================================
+// Seat layout & booking
+// ============================================================
+export type TRideSeatSchema = {
+  seatNumber: number;
+  kind: "driver" | "passenger";
+  status: "driver" | "booked" | "available";
+  bookedBy: { id: string; name: string } | null;
+};
+export type TRideProviderSchema = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  phone: string;
+  avgRating: number;
+  totalRides: number;
+};
+export type TRideVehicleSchema = {
+  id: string;
+  company: string;
+  model: string;
+  color: string;
+  plateNumber: string;
+  seatCapacity: number;
+};
+export type TRideSeatLayoutSchema = {
+  ride: {
+    id: string;
+    providerId: string;
+    vehicleId: string;
+    departureTime: Date;
+    totalSeats: number;
+    availableSeats: number;
+    status: string;
+  };
+  vehicle: TRideVehicleSchema;
+  seats: TRideSeatSchema[];
+  myBooking: number | null;
+};
+export type TRideAvailableSchema = TRideDataSchema & {
+  provider: TRideProviderSchema;
+  vehicle: TRideVehicleSchema;
+};
+export type TRideBookingDataSchema = {
+  booking: {
+    id: string;
+    rideId: string;
+    userId: string;
+    seatNumber: number;
+    status: string;
+    createdAt: Date;
+  };
+  ride: {
+    id: string;
+    availableSeats: number;
+    totalSeats: number;
+    status: string;
+  };
+};
+export interface IAvailableRidesResponseSchema {
+  success: boolean;
+  message: string;
+  data: TRideAvailableSchema[];
+}
+export interface IRideSeatLayoutResponseSchema {
+  success: boolean;
+  message: string;
+  data: TRideSeatLayoutSchema;
+}
+export interface IBookSeatResponseSchema {
+  success: boolean;
+  message: string;
+  data: TRideBookingDataSchema;
+}
