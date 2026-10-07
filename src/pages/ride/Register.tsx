@@ -32,8 +32,6 @@ const RideRegister = ({ onSuccess }: { onSuccess: () => void }) => {
   const [showMap, setShowMap] = useState(false);
   const [routeSelected, setRouteSelected] = useState(false);
   const vehicleState = useAppSelector((state) => state.vehicle);
-  const ride = useAppSelector((state) => state.ride);
-  console.log(ride);
   useEffect(() => {
     dispatch(getAllVehicle());
   }, [dispatch]);
@@ -81,7 +79,6 @@ const RideRegister = ({ onSuccess }: { onSuccess: () => void }) => {
         data.totalSeats = selectedVehicle.seatCapacity;
       }
       const response = await dispatch(registerRide(data)).unwrap();
-      console.log(response);
       toast.success(response.message);
       onSuccess();
     } catch (error) {

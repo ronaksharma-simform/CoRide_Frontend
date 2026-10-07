@@ -49,7 +49,6 @@ const RideCard = ({ ride, onUpdate }: RideCardProps) => {
   }).format(new Date(ride.departureTime));
 
   // Map status to shadcn Badge variants
-  console.log(ride);
   const dispatch = useAppDispatch();
   const onDelete = async () => {
     await dispatch(deleteRide({ id: ride.id }));

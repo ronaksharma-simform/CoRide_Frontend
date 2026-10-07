@@ -15,7 +15,6 @@ export default function AuthLayout() {
       </main>
     );
   }
-  console.log(isAuthenticated);
   if (isAuthenticated) {
     return <Navigate to={"/home"} replace />;
   }

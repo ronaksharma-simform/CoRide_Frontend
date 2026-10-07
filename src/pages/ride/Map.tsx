@@ -80,8 +80,6 @@ const RouteSelectorMap = ({ onRouteSelected }: RouteSelectorMapProps) => {
       lat: point.x,
       lng: point.y,
     }));
-    console.log(route);
-    console.log(simplifiedRoute);
     onRouteSelected({
       sourceLabel: points[0],
       destinationLabel: points[points.length - 1],
