@@ -23,3 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 .env 
+.claude/super-board/active
+.claude/settings.json.bak-*
+.claude/super-board/onboard-answers.json
+.claude/super-board/onboard-staged/
+.claude/super-board/backup/
+.claude/super-board/inflight/
+.claude/super-board/migrations/
+.claude/super-board/upgrade.json
