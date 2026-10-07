@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "description": "CoRide frontend board",
+  "project": {
+    "owner": "ronaksharma-simform",
+    "title": "Coride-frontend board",
+    "number": 1
+  },
+  "worker_backend": "workflow",
+  "model_tier": "medium",
+  "target": { "type": "repo", "url": null },
+  "repo": {
+    "path": ".",
+    "remote": "https://github.com/ronaksharma-simform/CoRide_Frontend"
+  },
+  "base_branch": "develop",
+  "timezone": "Asia/Kolkata",
+  "columns": [
+    "Backlog",
+    "Ready",
+    "Building",
+    "QA",
+    "Review",
+    "Blocked",
+    "Done"
+  ],
+  "labels": ["qa", "bug", "feature"],
+  "paths": {
+    "project_md": "docs/super-board/PROJECT.md",
+    "pre_flight_md": "docs/super-board/pre-flight.md",
+    "runs_dir": "docs/super-board/runs"
+  },
+  "human_approves_merge": false,
+  "merge_policy": { "default": "auto", "auto_max_lines": 400 },
+  "migrations": {
+    "globs": [],
+    "allowed_envs": [],
+    "target_env": "staging",
+    "commands": {},
+    "human_steps": []
+  },
+  "verify_commands": ["npm ci --silent && npm run lint && npm run build"],
+  "collect": {
+    "sources": ["github", "prs", "architecture"],
+    "window_days": 14
+  },
+  "notifications": {
+    "channel": "session",
+    "bot_identity": "ronaksharma-simform"
+  }
+}
