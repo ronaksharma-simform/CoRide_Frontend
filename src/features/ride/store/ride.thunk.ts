@@ -2,7 +2,10 @@ import api from "@/services/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import {
+  IAvailableRidesResponseSchema,
+  IBookSeatResponseSchema,
   IRideResponseSchema,
+  IRideSeatLayoutResponseSchema,
   IUserRideResponseSchema,
   TRide,
   TRideUpdateData,
@@ -162,3 +165,74 @@ export const getUserRides = createAsyncThunk<
     });
   },
 );
+export const getAvailableRides = createAsyncThunk<
+  IAvailableRidesResponseSchema,
+  void,
+  { rejectValue: { success: boolean; message: string } }
+>("ride/getAvailableRides", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get("/api/ride/available", {
+      headers: { "Content-Type": "application/json" },
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue({
+        success: false,
+        message: error.response?.data?.message || "Failed to load ride data",
+      });
+    }
+    return rejectWithValue({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+});
+export const getRideSeatLayout = createAsyncThunk<
+  IRideSeatLayoutResponseSchema,
+  { rideId: string },
+  { rejectValue: { success: boolean; message: string } }
+>("ride/getSeatLayout", async ({ rideId }, { rejectWithValue }) => {
+  try {
+    const response = await api.get(`/api/ride/${rideId}/layout`, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue({
+        success: false,
+        message: error.response?.data?.message || "Failed to load seat layout",
+      });
+    }
+    return rejectWithValue({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+});
+export const bookSeat = createAsyncThunk<
+  IBookSeatResponseSchema,
+  { rideId: string; seatNumber: number },
+  { rejectValue: { success: boolean; message: string } }
+>("ride/bookSeat", async ({ rideId, seatNumber }, { rejectWithValue }) => {
+  try {
+    const response = await api.post(
+      `/api/ride/${rideId}/book-seat`,
+      { seatNumber },
+      { headers: { "Content-Type": "application/json" } },
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue({
+        success: false,
+        message: error.response?.data?.message || "Failed to book the seat",
+      });
+    }
+    return rejectWithValue({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+});

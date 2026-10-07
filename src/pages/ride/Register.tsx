@@ -75,6 +75,15 @@ const RideRegister = ({ onSuccess }: { onSuccess: () => void }) => {
     (vehicle) => vehicle.id === selectedVehicleId,
   );
 
+  // Keep seats in sync with the selected vehicle: seat #1 is the driver,
+  // so the maximum bookable passengers is (seatCapacity - 1).
+  useEffect(() => {
+    if (selectedVehicle?.seatCapacity) {
+      setValue("totalSeats", selectedVehicle.seatCapacity);
+      setValue("availableSeats", Math.max(0, selectedVehicle.seatCapacity - 1));
+    }
+  }, [selectedVehicle?.seatCapacity, selectedVehicleId, setValue]);
+
   const onSubmit = async (data: TRideForm) => {
     try {
       if (selectedVehicle?.seatCapacity) {
