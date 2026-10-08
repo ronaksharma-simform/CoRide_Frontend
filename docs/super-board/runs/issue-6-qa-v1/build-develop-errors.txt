@@ -1,0 +1,38 @@
+src/App.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/components/guards/protectedRoutes.tsx(2,1): error TS6133: 'React' is declared but its value is never read.
+src/layouts/AuthLayout.tsx(5,1): error TS6133: 'React' is declared but its value is never read.
+src/layouts/HomeLayout.tsx(170,9): error TS2769: No overload matches this call.
+src/layouts/RideLayout.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/layouts/VehicleLayout.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/main.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/LandingPage.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/NotFoundPage.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/auth/Login.tsx(5,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/auth/SignUp.tsx(6,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/ride/FindRide.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/ride/Map.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/ride/Register.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/ride/Register.tsx(47,5): error TS2322: Type 'Resolver<{ vehicleId: string; departureTime: unknown; totalSeats: unknown; availableSeats: unknown; sourceLabel?: { lat: number; lng: number; } | undefined; destinationLabel?: { lat: number; lng: number; } | undefined; route?: { ...; }[] | undefined; status?: "ACTIVE" | ... 3 more ... | undefined; }, any, { ...; }>' is not assignable to type 'Resolver<{ vehicleId: string; route: { lat: number; lng: number; }[]; departureTime: Date; totalSeats: number; availableSeats: number; status: "ACTIVE" | "FULL" | "COMPLETED" | "CANCELLED"; sourceLabel?: { ...; } | undefined; destinationLabel?: { ...; } | undefined; }, any, { ...; }>'.
+src/pages/ride/Register.tsx(134,42): error TS2345: Argument of type '(data: TRideForm) => Promise<void>' is not assignable to parameter of type 'SubmitHandler<TFieldValues>'.
+src/pages/ride/Register.tsx(249,47): error TS18048: 'source' is possibly 'undefined'.
+src/pages/ride/Register.tsx(250,22): error TS18048: 'source' is possibly 'undefined'.
+src/pages/ride/Register.tsx(254,52): error TS18048: 'destination' is possibly 'undefined'.
+src/pages/ride/Register.tsx(255,22): error TS18048: 'destination' is possibly 'undefined'.
+src/pages/ride/RideCard.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/ride/Update.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/ride/Update.tsx(45,5): error TS2322: Type 'Resolver<{ sourceLabel?: { lat: number; lng: number; } | undefined; destinationLabel?: { lat: number; lng: number; } | undefined; route?: { lat: number; lng: number; }[] | undefined; departureTime?: unknown; totalSeats?: unknown; availableSeats?: unknown; status?: "ACTIVE" | ... 3 more ... | undefined; }, any, { ......' is not assignable to type 'Resolver<{ sourceLabel?: { lat: number; lng: number; } | undefined; destinationLabel?: { lat: number; lng: number; } | undefined; route?: { lat: number; lng: number; }[] | undefined; departureTime?: Date | undefined; totalSeats?: number | undefined; availableSeats?: number | undefined; status?: "ACTIVE" | ... 3 more...'.
+src/pages/ride/Update.tsx(61,9): error TS2322: Type 'string' is not assignable to type '"ACTIVE" | "FULL" | "COMPLETED" | "CANCELLED" | undefined'.
+src/pages/ride/Update.tsx(181,47): error TS18048: 'source' is possibly 'undefined'.
+src/pages/ride/Update.tsx(182,22): error TS18048: 'source' is possibly 'undefined'.
+src/pages/ride/Update.tsx(186,52): error TS18048: 'destination' is possibly 'undefined'.
+src/pages/ride/Update.tsx(187,22): error TS18048: 'destination' is possibly 'undefined'.
+src/pages/ride/Update.tsx(191,53): error TS18048: 'route' is possibly 'undefined'.
+src/pages/vehicle/Register.tsx(13,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/vehicle/Register.tsx(66,36): error TS2345: Argument of type '(data: TVehicle) => Promise<void>' is not assignable to parameter of type 'SubmitHandler<{ model: string; company: string; color: string; plateNumber: string; seatCapacity: unknown; }>'.
+src/pages/vehicle/Register.tsx(146,20): error TS2322: Type '{ onChange: (...event: any[]) => void; onBlur: Noop; value: unknown; disabled?: boolean | undefined; name: "seatCapacity"; ref: RefCallBack; type: "number"; placeholder: string; }' is not assignable to type 'InputHTMLAttributes<HTMLInputElement>'.
+src/pages/vehicle/VehicleCard.tsx(10,1): error TS6133: 'React' is declared but its value is never read.
+src/routes/auth.routes.tsx(5,1): error TS6133: 'React' is declared but its value is never read.
+src/routes/home.routes.tsx(4,1): error TS6133: 'React' is declared but its value is never read.
+src/routes/index.tsx(5,1): error TS6133: 'React' is declared but its value is never read.
+src/routes/vehicle.routes.tsx(2,1): error TS6133: 'React' is declared but its value is never read.
+src/routes/vehicle.routes.tsx(5,42): error TS2741: Property 'onSuccess' is missing in type '{}' but required in type '{ onSuccess: () => void; }'.
