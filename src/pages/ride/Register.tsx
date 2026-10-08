@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -22,6 +22,7 @@ import RouteSelectorMap from "./Map";
 import {
   RideFormSchema,
   TRideForm,
+  TRideFormInput,
 } from "@/features/ride/validations/ride.validations";
 import { registerRide } from "@/features/ride/store/ride.thunk";
 import { toast } from "sonner";
@@ -32,8 +33,6 @@ const RideRegister = ({ onSuccess }: { onSuccess: () => void }) => {
   const [showMap, setShowMap] = useState(false);
   const [routeSelected, setRouteSelected] = useState(false);
   const vehicleState = useAppSelector((state) => state.vehicle);
-  const ride = useAppSelector((state) => state.ride);
-  console.log(ride);
   useEffect(() => {
     dispatch(getAllVehicle());
   }, [dispatch]);
@@ -43,7 +42,7 @@ const RideRegister = ({ onSuccess }: { onSuccess: () => void }) => {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<TRideForm>({
+  } = useForm<TRideFormInput, unknown, TRideForm>({
     resolver: zodResolver(RideFormSchema),
 
     defaultValues: {
@@ -81,7 +80,6 @@ const RideRegister = ({ onSuccess }: { onSuccess: () => void }) => {
         data.totalSeats = selectedVehicle.seatCapacity;
       }
       const response = await dispatch(registerRide(data)).unwrap();
-      console.log(response);
       toast.success(response.message);
       onSuccess();
     } catch (error) {
@@ -183,6 +181,7 @@ const RideRegister = ({ onSuccess }: { onSuccess: () => void }) => {
                       min={1}
                       max={selectedVehicle?.seatCapacity}
                       {...field}
+                      value={field.value as number}
                     />
                   )}
                 />
@@ -206,7 +205,9 @@ const RideRegister = ({ onSuccess }: { onSuccess: () => void }) => {
                       type="datetime-local"
                       value={
                         field.value
-                          ? new Date(field.value).toISOString().slice(0, 16)
+                          ? new Date(field.value as Date)
+                              .toISOString()
+                              .slice(0, 16)
                           : ""
                       }
                       onChange={(e) => field.onChange(new Date(e.target.value))}
@@ -246,17 +247,17 @@ const RideRegister = ({ onSuccess }: { onSuccess: () => void }) => {
                   <h3 className="font-semibold">Route Summary</h3>
 
                   <p>
-                    <strong>Source:</strong> {source.lat.toFixed(6)},{" "}
-                    {source.lng.toFixed(6)}
+                    <strong>Source:</strong> {source?.lat.toFixed(6)},{" "}
+                    {source?.lng.toFixed(6)}
                   </p>
 
                   <p>
-                    <strong>Destination:</strong> {destination.lat.toFixed(6)},{" "}
-                    {destination.lng.toFixed(6)}
+                    <strong>Destination:</strong> {destination?.lat.toFixed(6)},{" "}
+                    {destination?.lng.toFixed(6)}
                   </p>
 
                   <p>
-                    <strong>Route Points:</strong> {route.length}
+                    <strong>Route Points:</strong> {route?.length}
                   </p>
                 </div>
               )}

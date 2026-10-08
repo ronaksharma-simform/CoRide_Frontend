@@ -31,6 +31,7 @@ export const VehicleRegistrationSchema = Vehicle.omit({
 });
 export type TVehicle = z.infer<typeof Vehicle>;
 export type TVehicleForm = z.input<typeof VehicleRegistrationSchema>;
+export type TVehicleRegistration = z.infer<typeof VehicleRegistrationSchema>;
 export interface IVehicleResponse {
   success: boolean;
   message: string;

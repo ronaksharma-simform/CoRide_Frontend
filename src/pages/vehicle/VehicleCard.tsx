@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TVehicle } from "@/features/vehicle/validations/vehicle.validations";
-import React from "react";
 import { useAppDispatch } from "@/hooks/hooks";
 import { deleteVehicle } from "@/features/vehicle/store/vehicle.thunk";
 
