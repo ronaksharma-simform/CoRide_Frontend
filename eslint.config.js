@@ -14,4 +14,6 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
+  // tsconfig uses "jsx": "react-jsx", so JSX needs no React import
+  pluginReact.configs.flat["jsx-runtime"],
 ]);

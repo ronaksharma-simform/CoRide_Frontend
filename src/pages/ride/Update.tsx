@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import {
   RideUpdateSchema,
   TRideDataSchema,
   TRideUpdateSchema,
+  TRideUpdateInput,
 } from "@/features/ride/validations/ride.validations";
 import { useAppDispatch } from "@/hooks/hooks";
 import { updateRide } from "@/features/ride/store/ride.thunk";
@@ -32,7 +33,7 @@ const RideUpdate = ({ ride, onSuccess }: RideUpdateProps) => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<TRideUpdateSchema>({
+  } = useForm<TRideUpdateInput, unknown, TRideUpdateSchema>({
     defaultValues: {
       sourceLabel: undefined,
       destinationLabel: undefined,
@@ -113,7 +114,9 @@ const RideUpdate = ({ ride, onSuccess }: RideUpdateProps) => {
                       type="datetime-local"
                       value={
                         field.value
-                          ? new Date(field.value).toISOString().slice(0, 16)
+                          ? new Date(field.value as Date)
+                              .toISOString()
+                              .slice(0, 16)
                           : ""
                       }
                       onChange={(e) => field.onChange(new Date(e.target.value))}
@@ -133,7 +136,13 @@ const RideUpdate = ({ ride, onSuccess }: RideUpdateProps) => {
                 <Controller
                   name="availableSeats"
                   control={control}
-                  render={({ field }) => <Input type="number" {...field} />}
+                  render={({ field }) => (
+                    <Input
+                      type="number"
+                      {...field}
+                      value={field.value as number | undefined}
+                    />
+                  )}
                 />
               </div>
 
@@ -178,17 +187,17 @@ const RideUpdate = ({ ride, onSuccess }: RideUpdateProps) => {
                   <h3 className="font-semibold">Route Summary</h3>
 
                   <p>
-                    <strong>Source:</strong> {source.lat.toFixed(6)},{" "}
-                    {source.lng.toFixed(6)}
+                    <strong>Source:</strong> {source?.lat.toFixed(6)},{" "}
+                    {source?.lng.toFixed(6)}
                   </p>
 
                   <p>
-                    <strong>Destination:</strong> {destination.lat.toFixed(6)},{" "}
-                    {destination.lng.toFixed(6)}
+                    <strong>Destination:</strong> {destination?.lat.toFixed(6)},{" "}
+                    {destination?.lng.toFixed(6)}
                   </p>
 
                   <p>
-                    <strong>Route Points:</strong> {route.length}
+                    <strong>Route Points:</strong> {route?.length}
                   </p>
                 </div>
               )}
