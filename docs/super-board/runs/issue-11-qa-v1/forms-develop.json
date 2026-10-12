@@ -1,0 +1,282 @@
+{
+  "label": "develop",
+  "scenarios": {
+    "vehicleStandalone": {
+      "emptyErrors": [
+        "Model is required",
+        "Company name must be at least 2 characters",
+        "Color is required",
+        "Invalid vehicle plate number",
+        "Seat Capacity must be at least 1"
+      ],
+      "badErrors": [
+        "Invalid vehicle plate number",
+        "Seat capacity cannot exceed 10"
+      ],
+      "toasts": [
+        "error: onSuccess is not a function",
+        "success: Vehicle registered"
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "body": null
+        },
+        {
+          "method": "POST",
+          "path": "/api/vehicle",
+          "body": {
+            "model": "Swift",
+            "company": "Maruti",
+            "color": "Red",
+            "seatCapacity": 4,
+            "plateNumber": "GJ01AB1234"
+          }
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ]
+    },
+    "vehicleSheet": {
+      "toasts": ["success: Vehicle registered"],
+      "sheetOpenAfterSave": false,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "body": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/vehicle/vehicles",
+          "body": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/vehicle/vehicles",
+          "body": null
+        },
+        {
+          "method": "POST",
+          "path": "/api/vehicle",
+          "body": {
+            "model": "City",
+            "company": "Honda",
+            "color": "White",
+            "seatCapacity": 5,
+            "plateNumber": "MH12CD5678"
+          }
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ]
+    },
+    "rideCreate_desktop": {
+      "createDisabledBeforeRoute": true,
+      "summary": [
+        "Route Summary",
+        "",
+        "Source: <lat>,<lng>",
+        "",
+        "Destination: <lat>,<lng>",
+        "",
+        "Route Points: 3"
+      ],
+      "badErrors": [],
+      "toasts": ["success: Ride created"],
+      "sheetOpenAfterSave": false,
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/api/ride",
+          "body": {
+            "vehicleId": "11111111-1111-4111-8111-111111111111",
+            "sourceLabel": "<clicked point>",
+            "destinationLabel": "<clicked point>",
+            "route": [
+              {
+                "lat": 23.03,
+                "lng": 72.55
+              },
+              {
+                "lat": 23.04,
+                "lng": 72.57
+              },
+              {
+                "lat": 23.05,
+                "lng": 72.6
+              }
+            ],
+            "departureTime": "2027-01-15T04:00:00.000Z",
+            "totalSeats": 4,
+            "availableSeats": 3,
+            "status": "ACTIVE"
+          }
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ]
+    },
+    "rideCreate_tablet": {
+      "createDisabledBeforeRoute": true,
+      "summary": [
+        "Route Summary",
+        "",
+        "Source: <lat>,<lng>",
+        "",
+        "Destination: <lat>,<lng>",
+        "",
+        "Route Points: 3"
+      ],
+      "badErrors": [],
+      "toasts": ["success: Ride created"],
+      "sheetOpenAfterSave": false,
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/api/ride",
+          "body": {
+            "vehicleId": "11111111-1111-4111-8111-111111111111",
+            "sourceLabel": "<clicked point>",
+            "destinationLabel": "<clicked point>",
+            "route": [
+              {
+                "lat": 23.03,
+                "lng": 72.55
+              },
+              {
+                "lat": 23.04,
+                "lng": 72.57
+              },
+              {
+                "lat": 23.05,
+                "lng": 72.6
+              }
+            ],
+            "departureTime": "2027-01-15T04:00:00.000Z",
+            "totalSeats": 4,
+            "availableSeats": 3,
+            "status": "ACTIVE"
+          }
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ]
+    },
+    "rideCreate_mobile": {
+      "createDisabledBeforeRoute": true,
+      "summary": [
+        "Route Summary",
+        "",
+        "Source: <lat>,<lng>",
+        "",
+        "Destination: <lat>,<lng>",
+        "",
+        "Route Points: 3"
+      ],
+      "badErrors": [],
+      "toasts": ["success: Ride created"],
+      "sheetOpenAfterSave": false,
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/api/ride",
+          "body": {
+            "vehicleId": "11111111-1111-4111-8111-111111111111",
+            "sourceLabel": "<clicked point>",
+            "destinationLabel": "<clicked point>",
+            "route": [
+              {
+                "lat": 23.03,
+                "lng": 72.55
+              },
+              {
+                "lat": 23.04,
+                "lng": 72.57
+              },
+              {
+                "lat": 23.05,
+                "lng": 72.6
+              }
+            ],
+            "departureTime": "2027-01-15T04:00:00.000Z",
+            "totalSeats": 4,
+            "availableSeats": 3,
+            "status": "ACTIVE"
+          }
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ]
+    },
+    "rideUpdate": {
+      "prefill": {
+        "departure": "2027-01-15T04:00",
+        "numbers": ["2"]
+      },
+      "toasts": ["success: Ride updated"],
+      "sheetOpenAfterSave": false,
+      "writes": [
+        {
+          "method": "PUT",
+          "path": "/api/ride/22222222-2222-4222-8222-222222222222",
+          "body": {
+            "sourceLabel": {
+              "lat": 23.03,
+              "lng": 72.55
+            },
+            "destinationLabel": {
+              "lat": 23.05,
+              "lng": 72.6
+            },
+            "route": [
+              {
+                "lat": 23.03,
+                "lng": 72.55
+              },
+              {
+                "lat": 23.05,
+                "lng": 72.6
+              }
+            ],
+            "departureTime": "2027-01-15T04:00:00.000Z",
+            "totalSeats": 4,
+            "availableSeats": 3,
+            "status": "ACTIVE"
+          }
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "A component is changing an uncontrolled input to be controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlle"
+      ]
+    }
+  }
+}
