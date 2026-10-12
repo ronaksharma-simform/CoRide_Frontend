@@ -152,7 +152,7 @@ const NavItem = ({
   isActive,
   onClick,
 }: {
-  icon: React.ReactNode;
+  icon: React.ReactElement<{ className?: string }>;
   label: string;
   isActive: boolean;
   onClick: () => void;
@@ -166,7 +166,7 @@ const NavItem = ({
           : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
       }`}
     >
-      {React.cloneElement(icon as React.ReactElement, {
+      {React.cloneElement(icon, {
         className: `w-5 h-5 ${isActive ? "text-primary-foreground" : ""}`,
       })}
       <span className="text-sm">{label}</span>

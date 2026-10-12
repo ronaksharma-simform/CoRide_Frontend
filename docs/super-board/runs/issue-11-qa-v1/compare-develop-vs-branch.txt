@@ -1,0 +1,7 @@
+DIFF vehicleStandalone toasts develop= ['error: onSuccess is not a function', 'success: Vehicle registered'] branch= ['success: Vehicle registered']
+vehicleStandalone writes equal 1 toasts ['success: Vehicle registered']
+vehicleSheet writes equal 1 toasts ['success: Vehicle registered']
+rideCreate_desktop writes equal 1 toasts ['success: Ride created']
+rideCreate_tablet writes equal 1 toasts ['success: Ride created']
+rideCreate_mobile writes equal 1 toasts ['success: Ride created']
+rideUpdate writes equal 1 toasts ['success: Ride updated']

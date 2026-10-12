@@ -14,7 +14,7 @@ type TRideDataSchema = {
   departureTime: Date;
   totalSeats: number;
   availableSeats: number;
-  status: string;
+  status: "ACTIVE" | "FULL" | "COMPLETED" | "CANCELLED";
   createdAt: Date;
   updatedAt: Date;
 };
@@ -55,6 +55,7 @@ export const RideFormSchema = z.object({
 });
 
 export type TRideForm = z.infer<typeof RideFormSchema>;
+export type TRideFormInput = z.input<typeof RideFormSchema>;
 export const RideUpdateData = z.object({
   id: z.string(),
   data: RideFormSchema.omit({ vehicleId: true }).partial(),
@@ -73,6 +74,7 @@ export const RideUpdateSchema = RideFormSchema.omit({
   vehicleId: true,
 }).partial();
 type TRideUpdateSchema = z.infer<typeof RideUpdateSchema>;
+export type TRideUpdateInput = z.input<typeof RideUpdateSchema>;
 type TRideUpdateData = z.infer<typeof RideUpdateData>;
 type TRide = z.infer<typeof RideFormSchema>;
 export { TRide, TRideUpdateSchema, TRideUpdateData, TRideDataSchema };

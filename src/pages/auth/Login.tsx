@@ -2,10 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch } from "@/hooks/hooks";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -27,7 +26,6 @@ const Login = () => {
     resolver: zodResolver(UserLoginSchema),
   });
   const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
   const onSubmit = async (data: IUserLoginSchema) => {
     try {
@@ -37,7 +35,6 @@ const Login = () => {
           password: data.password,
         }),
       ).unwrap();
-      console.log(selector);
       toast.success(response.message);
       navigate("/home");
     } catch (error) {

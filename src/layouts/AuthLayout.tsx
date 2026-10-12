@@ -2,7 +2,6 @@ import useIsAuthenticated from "@/hooks/isAuthenticated";
 import { useAppSelector } from "@/hooks/hooks";
 import { Navigate, Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
-import React from "react";
 
 export default function AuthLayout() {
   const isAuthenticated = useIsAuthenticated();
@@ -15,7 +14,6 @@ export default function AuthLayout() {
       </main>
     );
   }
-  console.log(isAuthenticated);
   if (isAuthenticated) {
     return <Navigate to={"/home"} replace />;
   }

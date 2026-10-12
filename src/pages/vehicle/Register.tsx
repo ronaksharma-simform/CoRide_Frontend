@@ -4,23 +4,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { registerVehicle } from "@/features/vehicle/store/vehicle.thunk";
 import {
-  TVehicle,
   TVehicleForm,
+  TVehicleRegistration,
   VehicleRegistrationSchema,
 } from "@/features/vehicle/validations/vehicle.validations";
 import { useAppDispatch } from "@/hooks/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const Register = ({ onSuccess }: { onSuccess: () => void }) => {
+const Register = ({ onSuccess }: { onSuccess?: () => void }) => {
   const dispatch = useAppDispatch();
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<TVehicleForm>({
+  } = useForm<TVehicleForm, unknown, TVehicleRegistration>({
     defaultValues: {
       model: "",
       company: "",
@@ -30,7 +29,7 @@ const Register = ({ onSuccess }: { onSuccess: () => void }) => {
     },
     resolver: zodResolver(VehicleRegistrationSchema),
   });
-  const onSubmit = async (data: TVehicle) => {
+  const onSubmit = async (data: TVehicleRegistration) => {
     try {
       const response = await dispatch(
         registerVehicle({
@@ -44,7 +43,7 @@ const Register = ({ onSuccess }: { onSuccess: () => void }) => {
 
       toast.success(response.message);
 
-      onSuccess();
+      onSuccess?.();
     } catch (error) {
       if (
         error instanceof Object &&
@@ -147,6 +146,7 @@ const Register = ({ onSuccess }: { onSuccess: () => void }) => {
                     type="number"
                     placeholder="Enter your vehicle seat capacity"
                     {...field}
+                    value={field.value as number}
                   />
                 )}
               />
